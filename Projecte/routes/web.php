@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VideoController;
+use App\Http\Controllers\VotController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -19,7 +21,6 @@ Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name("ho
 
 Auth::routes();
 
-
 Route::get('/config', [UserController::class, 'edit'])->name('config');
 Route::post('/config', [UserController::class, 'update'])->name('config');
 
@@ -28,3 +29,10 @@ Route::post('/config/password', [UserController::class, 'updatePassword'])->name
 
 Route::get('/pujarVideo', [VideoController::class, 'create'])->name('pujarVideo');
 Route::post('/pujarVideo', [VideoController::class, 'store'])->name('pujarVideo');
+
+Route::get('/video/{id}', [VideoController::class, 'index'])->name('video');
+
+Route::get('/user/{id}', [UserController::class, 'index'])->name('user');
+
+Route::post('/vot', [VotController::class, 'store'])->name('vot');
+Route::delete('/vot', [VotController::class, 'destroy'])->name('vot');

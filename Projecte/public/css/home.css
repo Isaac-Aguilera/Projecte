@@ -1,0 +1,36 @@
+@media (max-width: 575px) { 
+    .miniaturas  {
+        width: 275.98px;
+        height: 155.23px;
+    }
+}
+@media (min-width:576) and (max-width: 768px) { 
+    .miniaturas  {
+        width: 275,98px;
+        height: 155,23px;
+    }
+}
+
+
+@media (max-width: 992px) { 
+    .miniaturas  {
+        width: 280px;
+        height: 157px;
+    }
+ }
+
+@media (max-width: 1200px) { 
+    .miniaturas  {
+        width: 257px;
+        height: 145px;
+    }
+ }
+
+ @media (min-width: 1201px) { 
+    .miniaturas  {
+        width: 257px;
+        height: 145px;
+    }
+
+
+ }

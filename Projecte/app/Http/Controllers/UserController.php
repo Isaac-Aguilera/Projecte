@@ -12,20 +12,19 @@ use App\Models\User;
 use Intervention\Image\ImageServiceProvider;
 class UserController extends Controller
 {
-
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return view('index')->with('users', User::all());
+        $user = User::find($request->route('id'));
+        if (isset($user)) {
+            return view('user.detall')->with(['user' => $user]);
+        } else {
+            return view('user.detall')->with(['error' => "No s'ha pogut trobar l'usuari!"]);
+        }
     }
 
     /**
@@ -87,8 +86,8 @@ class UserController extends Controller
             'surname' => ['required', 'string', 'max:255'],
             'nick' => ['required', 'string', 'max:255', 'unique:users,nick,' . $id],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $id],
-            'file' => ['image'],
-        ])->validate();
+            'file' => ['required', 'image'],
+            ])->validate();
 
         $user = User::find($id);
         $user->fill($data);

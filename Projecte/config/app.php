@@ -227,8 +227,10 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-        
+
         'User' => App\Models\User::class,
+        'Video' => App\Models\Video::class,
+        'Vot' => App\Models\Vot::class,
 
     ],
 

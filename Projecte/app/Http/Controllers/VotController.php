@@ -35,7 +35,22 @@ class VotController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $video_id = $request->all()['id'];
+        $user_id = Auth::user()->id;
+        $vot = new Vot();
+        $vot->user_id = $user_id;
+        $vot->video_id = $video_id;
+        if ($request->all()['votacio'] == 'like') {
+            $resposta = 
+            $vot->votacio = 1;
+        } else {
+            $vot->votacio = 0;
+        }
+        $vot->save();
+        return { 
+            'likes' => Vots::all()->where('video_id', '=', $video_id)->where('votacio', '=', 1)->count(), 
+            'dislikes' => Vots::all()->where('video_id', '=', $video_id)->where('votacio', '=', 1)->count()
+        };
     }
 
     /**

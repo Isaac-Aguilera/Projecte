@@ -11,18 +11,20 @@ use Illuminate\Support\Facades\Storage;
 
 class VideoController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $video = Video::find($request->route('id'));
+        if (isset($video)) {
+            return view('video.detall')->with(['video' => $video]);
+        } else {
+            return view('video.detall')->with(['error' => "No s'ha pogut trobar el video!"]);
+        }
+        
     }
 
     /**
@@ -48,7 +50,7 @@ class VideoController extends Controller
             'video_path' => ['required', 'mimetypes:video/x-ms-asf,video/x-flv,video/mp4,application/x-mpegURL,video/MP2T,video/3gpp,video/quicktime,video/x-msvideo,video/x-ms-wmv,video/avi'],
             'title' => ['required','string','min:5','max:255'],
             'description' => ['required','string','min:5'],
-            'image' => ['required','image'],
+            'image' => ['required','image', 'dimensions:min_width=200,min_height=200'],
             'categoria_id' => ['required'],
         ])->validate();
         $p = $data['video_path']->store('videos');

@@ -75,7 +75,7 @@
                             <div class="col-md-6">
                                 <img class="img-fluid"  src="../{{ $user->image }}" alt="">
                             
-                                <input class="mt-3 @error('file') is-invalid @enderror" id="file" type="file" name="file">
+                                <input class="@error('file') is-invalid @enderror" id="file" type="file" name="file">
                                 @error('file')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>

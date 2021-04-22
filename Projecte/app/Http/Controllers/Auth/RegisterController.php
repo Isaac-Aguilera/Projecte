@@ -29,7 +29,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = RouteServiceProvider::HOME;
+    protected $redirectTo = RouteServiceProvider::barra;
 
     /**
      * Create a new controller instance.
@@ -54,6 +54,7 @@ class RegisterController extends Controller
             'surname' => ['required', 'string', 'max:255'],
             'nick' => ['required', 'string', 'max:255', 'unique:users'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'avatar' => ['required','image'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
     }
@@ -66,12 +67,20 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+        $request = app('request');
+        $filename = "";
+        if($request->hasFile('avatar')){
+            $filename = $request->avatar->store('avatars');
+        }
+
+
         return User::create([
             'role' => 'user',
             'name' => $data['name'],
             'surname' => $data['surname'],
             'nick' => $data['nick'],
             'email' => $data['email'],
+            'image' => $filename,
             'password' => Hash::make($data['password']),
         ]);
     }
