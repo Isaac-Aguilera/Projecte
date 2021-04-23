@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Video;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Categoria;
@@ -61,6 +62,31 @@ class VideoController extends Controller
         $video->save();
         
         return redirect()->route('pujarVideo')->with(['message' => 'Video penjat correctament']);
+    }
+
+    public function search(Request $request){
+        // Get the search value from the request
+        $search = $request->input('search');
+
+        if(User::where('nick',$search)->first()) {
+            $user = User::where('nick',$search)->first();
+
+            $id = $user->id;
+            $posts = Video::query()
+            ->where('title', 'LIKE', "%{$search}%")
+            ->orWhere('user_id', '=', "{$id}")
+            ->get();
+        }else {
+            $posts = Video::query()
+            ->where('title', 'LIKE', "%{$search}%")
+            ->get();
+        }
+
+
+        // Search in the title and body columns from the posts table
+    
+        // Return the search view with the resluts compacted
+        return redirect()->route('home')->with(['videosearch' => $posts]);
     }
 
     /**

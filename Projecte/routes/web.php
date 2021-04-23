@@ -36,3 +36,5 @@ Route::get('/user/{id}', [UserController::class, 'index'])->name('user');
 
 Route::post('/vot', [VotController::class, 'store'])->name('vot');
 Route::delete('/vot', [VotController::class, 'destroy'])->name('vot');
+
+Route::get('/search', [VideoController::class, 'search'])->name('search');
