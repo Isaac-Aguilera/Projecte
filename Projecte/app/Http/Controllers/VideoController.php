@@ -19,7 +19,9 @@ class VideoController extends Controller
      */
     public function index(Request $request)
     {
+        
         $video = Video::find($request->route('id'));
+        $video->increment('views',1);
         if (isset($video)) {
             return view('video.detall')->with(['video' => $video]);
         } else {
@@ -86,7 +88,7 @@ class VideoController extends Controller
         // Search in the title and body columns from the posts table
     
         // Return the search view with the resluts compacted
-        return redirect()->route('home')->with(['videosearch' => $posts]);
+        return view('video.search')->with('videosearch' , $posts);
     }
 
     /**
