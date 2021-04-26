@@ -1,0 +1,11 @@
+@media (max-width: 1200px) { 
+    .miniaturas  {
+        height: 150px;
+    }
+ }
+
+ @media (min-width: 1201px) { 
+    .miniaturas  {
+        height: 257px;
+    }
+ }
