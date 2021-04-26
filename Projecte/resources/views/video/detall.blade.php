@@ -16,7 +16,7 @@
                     <div class="card-header">{{ $video->title }}
                     </div>
                     <div class="card-body">  
-                        <video class="w-100" controls>
+                        <video class="w-100" poster="../{{ $video->image }}" controls>
                             <source src="../{{ $video->video_path }}">
                         </video>
                         @if (Auth::user()) 

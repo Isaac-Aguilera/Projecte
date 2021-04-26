@@ -32,7 +32,12 @@
                                                 @else
                                                     {{ $video->title }}
                                                 @endif
-                                            </span></strong><br><br>
+                                            </span></strong><br>
+
+                                            <span class="text-muted">{{$video->views . ' views'}}</span> ·
+                                        <span class="text-muted">
+                                            {{ \FormatTime::LongTimeFilter($video->created_at) }}
+                                        </span><br><br>
     
                                             <a href="{{ route('user', $video->user->id) }}">
                                                 <img class="mr-1"
@@ -40,11 +45,15 @@
                                                     src="../{{ $video->user->image }}">
                                             </a>
                                         <span class="text-muted">{{$video->user->nick}}</span><br><br>
-                                        <span class="text-muted">{{$video->description}}</span><br><br>
+                                        <span class="text-muted" title="{{$video->description}}">
+                                            @if ( Str::length($video->description) >= 139)
+                                            {{ Str::of($video->description)->limit(136, ' ...') }}
 
-                                        <span class="badge badge-dark">
-                                            {{$video->created_at}}
+                                            @else
+                                                {{ $video->description }}
+                                            @endif
                                         </span>
+                                        
                                     </div>
     
                                 </div>

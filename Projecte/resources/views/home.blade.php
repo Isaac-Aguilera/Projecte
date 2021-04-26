@@ -1,6 +1,7 @@
 @extends('layouts.app')
 @stack('styles')
 <link href="{{ asset('css/home.css') }}" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.5.0.js"></script>
 
 
 @section('content')
@@ -14,8 +15,7 @@
 
                     <div class="card mb-4 shadow">
                         <a href="{{ route('video', $video->id) }}">
-                            <img class="miniaturas w-100 card-img-top" src="{{$video->image}}" alt="Miniatura Vídeo"
-                                title="Miniatura Vídeo">
+                            <video class="miniaturas w-100 card-img-top"  src="../{{ $video->video_path }}" poster="../{{ $video->image }}"  onmouseover="bigImg(this)" onmouseout="normalImg(this)" muted="muted"></video>
                         </a>
                         <div class="card-body">
                             <div class="row">
@@ -39,8 +39,9 @@
 
 
                                     <span class="text-muted">{{$video->user->nick}}</span><br>
-                                    <span class="badge badge-dark">
-                                        {{$video->created_at}}
+                                    <span class="text-muted">{{$video->views . ' views'}}</span><br>
+                                    <span class="text-muted">
+                                        {{ \FormatTime::LongTimeFilter($video->created_at) }}
                                     </span>
                                 </div>
 
@@ -53,3 +54,25 @@
         </div>
 </main>
 @endsection
+<script type="text/javascript">
+    function bigImg(x) {
+        x.autoplay = true;
+        x.readyState = 4;
+        if(x.readyState == 4) {
+            x.play();
+        }else {
+            x.load();
+        }
+    }
+
+    function normalImg(x) {
+        x.autoplay = false;
+        x.readyState = 0;
+        if(x.readyState == 4) {
+            x.pause();
+        }else {
+            x.load()
+        }
+        
+    }
+</script>

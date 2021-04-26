@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use FFMpeg;
 use App\Models\Video;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -50,14 +50,15 @@ class VideoController extends Controller
     {
         $data = $request->all();
         Validator::make($data, [
-            'video_path' => ['required', 'mimetypes:video/x-ms-asf,video/x-flv,video/mp4,application/x-mpegURL,video/MP2T,video/3gpp,video/quicktime,video/x-msvideo,video/x-ms-wmv,video/avi'],
+            'video_path' => ['required', 'mimetypes:video/x-ms-asf,video/x-flv,video/mp4,application/x-mpegURL,video/MP2T,video/3gpp,video/quicktime,video/x-msvideo,video/x-ms-wmv,video/avi,video/webm'],
             'title' => ['required','string','min:5','max:255'],
-            'description' => ['required','string','min:5'],
+            'description' => [],
             'image' => ['required','image', 'dimensions:min_width=200,min_height=200'],
             'categoria_id' => ['required'],
         ])->validate();
         $p = $data['video_path']->store('videos');
         $data['video_path'] = $p;
+        FFMpeg::open($p)->export()->inFormat(new FFMpeg\Format\Video\WebM)->save();
         $p = $data['image']->store('miniaturas');
         $data['image'] = $p;
         $video = new Video($data);
@@ -77,10 +78,12 @@ class VideoController extends Controller
             $posts = Video::query()
             ->where('title', 'LIKE', "%{$search}%")
             ->orWhere('user_id', '=', "{$id}")
+            ->orderBy('views','DESC')
             ->get();
         }else {
             $posts = Video::query()
             ->where('title', 'LIKE', "%{$search}%")
+            ->orderBy('views','DESC')
             ->get();
         }
 
