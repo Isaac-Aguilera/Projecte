@@ -5,6 +5,7 @@
 @section('content')
 <main class="main" role="main">
     <div class="container bg-white shadow p-5 rounded">
+      
         @if (isset($error))
         <div class="card">
             <div class="card-header">Error!</div>
@@ -17,33 +18,25 @@
             <div class="col-12 w-100">
                 <a href="{{ route('user', $user->nick) }}">
                     <img class="mr-1" style="border-radius:50%;width:5.5vw;min-width:80px;min-height:80px;"
-                        src="../{{ $user->image }}">
+                        src="../../{{ $user->image }}">
                 </a>
                 <strong><span class="h1 pl-3">{{ $user->nick }}</span></strong>
             </div>
         </div>
-
         @include('layouts.users')
         @section('user-content')
         @stop
 
-        @foreach($categorias as $categoria)
             <div class="row bg-light">
-                <div class="col-12">
-
-                    @if ($categoria->videos->where('user_id', '=', $user->id)->count() >= 1)
-                    <h4 class="ml-3 font-weight-bold">{{ $categoria->name }}</h4>
-                    
-
-              
+                <div class="col-12">                    
                     <div class="row bg-light">
-                            @foreach($categoria->videos->where('user_id', '=', $user->id) as $video)
+                            @foreach($posts->where('user_id', '=', $user->id) as $video)
 
                             <div class="col-lg-4 col-md-6 col-sm-6">
                             <div class="card m-3">
                                 <a href="{{ route('video', $video->id) }}">
-                                        <video class="miniaturas w-100 card-img-top" src="../{{ $video->video_path }}"
-                                        poster="../{{ $video->image }}" onmouseover="bigImg(this)" onmouseout="normalImg(this)" loop
+                                        <video class="miniaturas w-100 card-img-top" src="../../{{ $video->video_path }}"
+                                        poster="../../{{ $video->image }}" onmouseover="bigImg(this)" onmouseout="normalImg(this)" loop
                                         preload="none" muted="muted"></video>
                                 </a>
                                 <div class="card-body">
@@ -52,7 +45,7 @@
                                             <a href="{{ route('user', $video->user->nick) }}">
                                                 <img class="mr-1"
                                                     style="border-radius:50%;width:2.5vw;min-width:40px;min-height:40px;"
-                                                    src="../{{ $video->user->image }}">
+                                                    src="../../{{ $video->user->image }}">
                                             </a>
     
                                         </div>
@@ -86,8 +79,6 @@
 
             </div>
             
-            @endif
-        @endforeach
 
             @endif
         </div>

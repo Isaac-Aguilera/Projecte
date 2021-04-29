@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Valoracio;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ValoracioController extends Controller
 {
@@ -35,7 +36,25 @@ class ValoracioController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $video_id = $request->all()['video_id'];
+        $user_id = Auth::user()->id;
+        $name = $request->all()['name'];
+        $valor = $request->all()['votacio'];
+        $valoracio = Valoracio::all()->where('user_id', '=', $user_id)->where('video_id', '=', $video_id)->where('name', '=', $name)->first();
+        if (!isset($valoracio)) {
+            $valoracio = new Valoracio();
+            $valoracio->user_id = $user_id;
+            $valoracio->video_id = $video_id;
+            $valoracio->name = $name;
+            $valoracio->valoracio = $valor;
+        } else {
+            $valoracio->valoracio = $valor;
+        }
+        $valoracio->save();
+        //Valoracio::select(sum('valoracio')/count('name'))->where('video_id', '=', $video_id)->groupBy('name')->get()
+        return array( 
+            'valoracions' => "aigua"
+        );
     }
 
     /**

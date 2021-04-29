@@ -1,6 +1,12 @@
 @extends('layouts.app')
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.js"></script>
 @section('content')
+@stack('styles')
+<link href="{{ asset('css/progress.css') }}" rel="stylesheet">
+
+    
+
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
@@ -9,12 +15,17 @@
                 <div class="card-header">{{ __('Pujar Video') }}</div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ route('pujarVideo') }}" enctype="multipart/form-data">
+                    <form method="POST" class="myform" action="{{ route('pujarVideo') }}" enctype="multipart/form-data">
                         @csrf
 
                         @if (session('message')) 
                         <div class="alert alert-success">{{ session()->get('message') }}</div> 
                         @endif 
+
+                        <div class="progress">
+                            <div class="bar"></div >
+                            <div class="percent">0%</div >
+                        </div>
 
                         <input id="user_id" type="number" name="user_id" value="{{ Auth::user()->id }}" hidden>
 
@@ -99,4 +110,30 @@
         </div>
     </div>
 </div>
+
 @endsection
+
+
+<script type="text/javascript">
+    $(function() {
+         $(document).ready(function()
+         {
+            var bar = $('.bar');
+            var percent = $('.percent');
+            console.log(bar);
+        $('.myform').submit({
+        beforeSend: function() {
+            var percentVal = '0%';
+            bar.width(percentVal);
+            console.log(bar.width);
+            percent.html(percentVal);
+        },
+        uploadProgress: function(event, position, total, percentComplete) {
+            var percentVal = percentComplete + '%';
+            bar.width(percentVal);
+            percent.html(percentVal);
+        }
+      });
+   }); 
+ });
+</script>

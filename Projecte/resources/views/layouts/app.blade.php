@@ -16,6 +16,7 @@
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
@@ -67,7 +68,7 @@
                                 </li>
 
                                 <a id="navbarDropdown" class="nav-link text-light dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    <img class="mr-2" style="border-radius:50%;width:2.5vw;min-width:40px;min-height:40px;" src="../{{ Auth::User()->image }}">
+                                    <img class="mr-2" style="border-radius:50%;width:2.5vw;min-width:40px;min-height:40px;" src="../../{{ Auth::User()->image }}">
                                     {{ Auth::user()->name }}
                                 </a>
 

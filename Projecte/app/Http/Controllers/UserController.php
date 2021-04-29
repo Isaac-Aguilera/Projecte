@@ -33,6 +33,56 @@ class UserController extends Controller
         }
     }
 
+    public function uservid(Request $request,$nick)
+    {
+        $user = User::where('nick',$nick)->first();
+        if (isset($user)) {
+            $posts = Video::query()->where("user_id", "=", "{$user->id}")->orderBy('created_at','DESC')->get();
+            return view('user.videos')->with(['user' => $user, 'posts' => $posts]);
+        } else {
+            return view('user.videos')->with(['error' => "No s'ha pogut trobar l'usuari!"]);
+        }
+    }
+
+    public function userinfo(Request $request,$nick)
+    {
+        $user = User::where('nick',$nick)->first();
+        if (isset($user)) {
+
+            $posts = Video::query()->select('views')->where("user_id", "=", "{$user->id}")->get();
+            return view('user.info')->with(['user' => $user,'views' => $posts]);
+        } else {
+            return view('user.info')->with(['error' => "No s'ha pogut trobar l'usuari!"]);
+        }
+    }
+
+    public function usersearch(Request $request,$nick){
+        // Get the search value from the request
+        $search = $request->input('search');
+
+
+        if(User::where('nick', 'LIKE', "%{$nick}%")->first()) {
+            $user = User::where('nick', '=', $nick)->first();
+
+            $id = $user->id;
+
+ 
+            $posts = Video::query()
+            ->where('user_id', '=', $id)
+            ->where('title', 'LIKE', "%{$search}%")
+            ->orderBy('views','DESC')
+            ->get();
+        }else {
+            $posts = Video::query()
+            ->where('title', 'LIKE', "%{$search}%")
+            ->orderBy('views','DESC')
+            ->get();
+        }
+
+
+        return view('user.search')->with(['posts' => $posts, 'user' => $user]);
+    }
+
     /**
      * Show the form for creating a new resource.
      *

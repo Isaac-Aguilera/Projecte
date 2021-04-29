@@ -1,5 +1,9 @@
 @extends('layouts.app')
-
+<style>
+	.checked {
+		color: orange;
+	}
+</style>
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
@@ -47,7 +51,30 @@
                             <i id="dislike_{{ $video->id }}" class="bi bi-hand-thumbs-down" onclick="like({{ $video->id }}, 'dislike')"></i>
                             <span id="dislike_{{ $video->id }}_count">{{ $video->vots->where('votacio', '=', false)->count() }}</span>
                         @endif
-                        
+                        <hr>
+                        <h3>Video quality</h3>
+                        @for ($i = 1; $i < 6; $i++)
+                            <button class="fa fa-star" onmouseover="cmbst('video',{{ $i }})"
+                            onmouseout="cmbst2('video',{{ $i }})" id={{ 'video'.$i }} value={{ $i }}
+                            style="background-color: white; border:0;" onclick="valorar('video',{{ $i }},{{ $video->id }})"></button>
+                        @endfor
+                        <br>
+                        <hr>
+                        <h3>Audio quality</h3>
+                        @for ($i = 1; $i < 6; $i++)
+                            <button class="fa fa-star" onmouseover="cmbst('audio',{{ $i }})"
+                            onmouseout="cmbst2('audio',{{ $i }})" id={{ 'audio'.$i }} value={{ $i }}
+                            style="background-color: white; border:0;" onclick="valorar('audio',{{ $i }},{{ $video->id }})"></button>
+                        @endfor
+                        <br>
+                        <hr>
+                        <h3>Content quality</h3>
+                        @for ($i = 1; $i < 6; $i++)
+                            <button class="fa fa-star" onmouseover="cmbst('content',{{ $i }})"
+                            onmouseout="cmbst2('content',{{ $i }})" id={{ 'content'.$i }} value={{ $i }}
+                            style="background-color: white; border:0;" onclick="valorar('content',{{ $i }},{{ $video->id }})"></button>
+                        @endfor
+                        <br>
                     </div>
                     <br>
                     <hr>
@@ -153,4 +180,109 @@
             }
         }
     }
+
+    function valorar(name, id, video_id) {
+        $.ajax({
+            url: '../valoracio',
+            method: 'post',
+            data: {
+                '_token': '{{ csrf_token() }}',
+                'video_id': video_id,
+                'votacio': id,
+                'name': name 
+            },
+            error: function(response){
+                alert(response['statusText']);
+                //alert("Has de fer login per a poder valorar!");
+            },
+            success: function(response){
+                console.log(response['valoracions']);
+                if (id == 1) {
+			        document.getElementById(name+id.toString()).classList.add('checked');
+                }
+                if (id == 2) {
+                    document.getElementById(name+(id - 1).toString()).classList.add('checked');
+                    document.getElementById(name+id.toString()).classList.add('checked');
+                }
+                if (id == 3) {
+                    document.getElementById(name+(id - 2).toString()).classList.add('checked');
+                    document.getElementById(name+(id - 1).toString()).classList.add('checked');
+                    document.getElementById(name+id.toString()).classList.add('checked');
+                }
+                if (id == 4) {
+                    document.getElementById(name+(id - 3).toString()).classList.add('checked');
+                    document.getElementById(name+(id - 2).toString()).classList.add('checked');
+                    document.getElementById(name+(id - 1).toString()).classList.add('checked');
+                    document.getElementById(name+id.toString()).classList.add('checked');
+                }
+                if (id == 5) {
+                    document.getElementById(name+(id - 4).toString()).classList.add('checked');
+                    document.getElementById(name+(id - 3).toString()).classList.add('checked');
+                    document.getElementById(name+(id - 2).toString()).classList.add('checked');
+                    document.getElementById(name+(id - 1).toString()).classList.add('checked');
+                    document.getElementById(name+id.toString()).classList.add('checked');
+                }
+            }
+        });
+		console.log(document.getElementById(name+(id).toString()).value);
+	}
+
+	function cmbst(name, id) {
+
+		if (id == 1) {
+			document.getElementById(name+id.toString()).classList.add('checked');
+		}
+		if (id == 2) {
+			document.getElementById(name+(id - 1).toString()).classList.add('checked');
+			document.getElementById(name+id.toString()).classList.add('checked');
+		}
+		if (id == 3) {
+			document.getElementById(name+(id - 2).toString()).classList.add('checked');
+			document.getElementById(name+(id - 1).toString()).classList.add('checked');
+			document.getElementById(name+id.toString()).classList.add('checked');
+		}
+		if (id == 4) {
+			document.getElementById(name+(id - 3).toString()).classList.add('checked');
+			document.getElementById(name+(id - 2).toString()).classList.add('checked');
+			document.getElementById(name+(id - 1).toString()).classList.add('checked');
+			document.getElementById(name+id.toString()).classList.add('checked');
+		}
+        if (id == 5) {
+            document.getElementById(name+(id - 4).toString()).classList.add('checked');
+			document.getElementById(name+(id - 3).toString()).classList.add('checked');
+			document.getElementById(name+(id - 2).toString()).classList.add('checked');
+			document.getElementById(name+(id - 1).toString()).classList.add('checked');
+			document.getElementById(name+id.toString()).classList.add('checked');
+		}
+
+	}
+
+	function cmbst2(name, id) {
+		if (id == 1) {
+			document.getElementById(name+id.toString()).classList.remove('checked');
+		}
+
+		if (id == 2) {
+			document.getElementById(name+(id - 1).toString()).classList.remove('checked');
+			document.getElementById(name+id.toString()).classList.remove('checked');
+		}
+		if (id == 3) {
+			document.getElementById(name+(id - 2).toString()).classList.remove('checked');
+			document.getElementById(name+(id - 1).toString()).classList.remove('checked');
+			document.getElementById(name+id.toString()).classList.remove('checked');
+		}
+		if (id == 4) {
+			document.getElementById(name+(id - 3).toString()).classList.remove('checked');
+			document.getElementById(name+(id - 2).toString()).classList.remove('checked');
+			document.getElementById(name+(id - 1).toString()).classList.remove('checked');
+			document.getElementById(name+id.toString()).classList.remove('checked');
+		}
+        if (id == 5) {
+            document.getElementById(name+(id - 4).toString()).classList.remove('checked');
+			document.getElementById(name+(id - 3).toString()).classList.remove('checked');
+			document.getElementById(name+(id - 2).toString()).classList.remove('checked');
+			document.getElementById(name+(id - 1).toString()).classList.remove('checked');
+			document.getElementById(name+id.toString()).classList.remove('checked');
+		}
+	}
 </script>

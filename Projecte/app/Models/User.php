@@ -17,10 +17,13 @@ use Illuminate\Notifications\Notifiable;
  * @property string $role
  * @property string $updated_at
  * @property string $created_at
+ * @property string channel_desc
+ * @property string banner
  * @property Comentari[] $comentaris
  * @property Valoracion[] $valoracions
  * @property Video[] $videos
  * @property Vot[] $vots
+ * 
  */
 class User extends Authenticatable
 {
@@ -35,7 +38,7 @@ class User extends Authenticatable
     /**
      * @var array
      */
-    protected $fillable = ['name', 'surname', 'nick', 'email', 'password', 'image', 'role','Vots'];
+    protected $fillable = ['name', 'surname', 'nick', 'email', 'password', 'image', 'role','Vots','channel_desc','banner'];
 
     /**
      * The attributes that should be hidden for arrays.

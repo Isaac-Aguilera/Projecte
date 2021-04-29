@@ -17,8 +17,9 @@
                                 <div class="row">
                                     <div class="col-6">
                                         <a href="{{ route('video', $video->id) }}">
-                                            <img class="miniaturas w-100 card-img-top" src="{{$video->image}}" alt="Miniatura Vídeo"
-                                                title="Miniatura Vídeo">
+                                            <video class="miniaturas w-100 card-img-top" src="{{ $video->video_path }}"
+                                                poster="{{ $video->image }}" onmouseover="bigImg(this)" onmouseout="normalImg(this)" loop
+                                                preload="none" muted="muted"></video>
                                         </a>
 
                                      
@@ -65,3 +66,23 @@
             </div>
 </main>
 @endsection
+
+<script type="text/javascript">
+    function bigImg(x) {
+        x.autoplay = true;
+        x.preload = "auto";
+        if(x.readyState == 4) {
+            x.play();
+        }
+    }
+
+    function normalImg(x) {
+        x.autoplay = false;
+        if(x.readyState == 4) {
+            x.pause();
+            var v = x.src
+            x.src = "";
+            x.src = v;
+        }    
+    }
+</script>

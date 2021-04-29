@@ -67,6 +67,9 @@
         x.autoplay = false;
         if(x.readyState == 4) {
             x.pause();
+            var v = x.src
+            x.src = "";
+            x.src = v;
         }    
     }
 </script>

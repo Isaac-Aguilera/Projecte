@@ -1,13 +1,14 @@
 <?php
 
 namespace App\Http\Controllers;
-use FFMpeg;
 use App\Models\Video;
 use App\Models\User;
+use App\Jobs\UploadVideo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Categoria;
 use Illuminate\Support\Facades\Validator;
+use FFMpeg;
 use Illuminate\Support\Facades\Storage;
 
 class VideoController extends Controller
@@ -52,42 +53,40 @@ class VideoController extends Controller
         Validator::make($data, [
             'video_path' => ['required', 'mimetypes:video/x-ms-asf,video/x-flv,video/mp4,application/x-mpegURL,video/MP2T,video/3gpp,video/quicktime,video/x-msvideo,video/x-ms-wmv,video/avi,video/webm'],
             'title' => ['required','string','min:5','max:255'],
-            'description' => [],
+            'description' => ['required','min:5'],
             'image' => ['required','image', 'dimensions:min_width=200,min_height=200'],
             'categoria_id' => ['required'],
         ])->validate();
         
         $f = $request->file('video_path');
+
         $p = $f->store('videos');
+        $data['video_path'] = $p;
+        $i = $data['image']->store('miniaturas');
+        $data['image'] = $i;
         if ($f->extension() != "webm") {
-            $p = $f->store('videos');
-            #->resize(3840,2160)
-            FFMpeg::open($p)->export()->inFormat(new FFMpeg\Format\Video\WebM)->save(preg_replace('/\\.[^.\\s]{3,4}$/', '', $p).'.webm');
-            Storage::delete($p);
-            $data['video_path'] = preg_replace('/\\.[^.\\s]{3,4}$/', '', $p).'.webm';
-        } else {
-            $data['video_path'] = $p;
+            $this->dispatch(new UploadVideo($data));
+        }else {
+            $video = new Video($data);
+            $video->save();
         }
-        $p = $data['image']->store('miniaturas');
-        $data['image'] = $p;
-        $video = new Video($data);
-        $video->save();
         
         return redirect()->route('pujarVideo')->with(['message' => 'Video penjat correctament']);
+
     }
 
     public function search(Request $request){
         // Get the search value from the request
         $search = $request->input('search');
 
-        if(User:user:where('nick', 'LIKE', "%{$search}%")->first()) {
+        if(User::where('nick', 'LIKE', "%{$search}%")->first()) {
             $user = User::where('nick', 'LIKE', "%{$search}%")->first();
 
-            $nick = $user->nick;
-            $username = User::where('nick','LIKE','%'.$search.'%')
+            $id = $user->id;
+            $username = User::where('nick','LIKE','%'.$search.'%');
             $posts = Video::query()
             ->where('title', 'LIKE', "%{$search}%")
-            ->orWhere($username)
+            ->orWhere('user_id', 'LIKE', "%{$id}%")
             ->orderBy('views','DESC')
             ->get();
         }else {
