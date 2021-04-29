@@ -32,7 +32,7 @@ Route::post('/pujarVideo', [VideoController::class, 'store'])->name('pujarVideo'
 
 Route::get('/video/{id}', [VideoController::class, 'index'])->name('video');
 
-Route::get('/user/{id}', [UserController::class, 'index'])->name('user');
+Route::get('/user/{nick}', [UserController::class, 'index'])->name('user');
 
 Route::post('/vot', [VotController::class, 'store'])->name('vot');
 Route::delete('/vot', [VotController::class, 'destroy'])->name('vot');

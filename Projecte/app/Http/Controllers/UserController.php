@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use App\Models\User;
+use App\Models\Video;
+use App\Models\Categoria;
 use Intervention\Image\ImageServiceProvider;
 class UserController extends Controller
 {
@@ -17,11 +19,15 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(Request $request,$nick)
     {
-        $user = User::find($request->route('id'));
+        $user = User::where('nick',$nick)->first();
         if (isset($user)) {
-            return view('user.detall')->with(['user' => $user]);
+
+            $categorias = Categoria::all();
+
+            $posts = Video::query()->where("user_id", "=", "{$user->id}")->orderBy('created_at','DESC')->get();
+            return view('user.detall')->with(['user' => $user, 'posts' => $posts, 'categorias' => $categorias]);
         } else {
             return view('user.detall')->with(['error' => "No s'ha pogut trobar l'usuari!"]);
         }

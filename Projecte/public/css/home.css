@@ -1,7 +1,8 @@
 @media (max-width: 1200px) { 
     .miniaturas  {
-        width: 257px;
+        width: 357px;
         height: 145px;
+        object-fit: fill;
     }
 
     .card {
@@ -11,8 +12,9 @@
 
  @media (min-width: 1201px) { 
     .miniaturas  {
-        width: 257px;
+        width: 357px;
         height: 185px;
+        object-fit: fill;
     }
 
     .card {

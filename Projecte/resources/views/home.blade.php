@@ -15,12 +15,12 @@
 
                     <div class="card mb-4 shadow">
                         <a href="{{ route('video', $video->id) }}">
-                            <video class="miniaturas w-100 card-img-top"  src="../{{ $video->video_path }}" poster="../{{ $video->image }}"  onmouseover="bigImg(this)" onmouseout="normalImg(this)" muted="muted"></video>
+                            <video class="miniaturas w-100 p-0 m-0"  src="../{{ $video->video_path }}" poster="../{{ $video->image }}"  onmouseover="bigImg(this)" onmouseout="normalImg(this)" loop preload="none" muted="muted"></video>
                         </a>
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-3">
-                                    <a href="{{ route('user', $video->user->id) }}">
+                                    <a href="{{ route('user', $video->user->nick) }}">
                                         <img class="mr-1"
                                             style="border-radius:50%;width:2.5vw;min-width:40px;min-height:40px;"
                                             src="../{{ $video->user->image }}">
@@ -57,22 +57,16 @@
 <script type="text/javascript">
     function bigImg(x) {
         x.autoplay = true;
-        x.readyState = 4;
+        x.preload = "auto";
         if(x.readyState == 4) {
             x.play();
-        }else {
-            x.load();
         }
     }
 
     function normalImg(x) {
         x.autoplay = false;
-        x.readyState = 0;
         if(x.readyState == 4) {
             x.pause();
-        }else {
-            x.load()
-        }
-        
+        }    
     }
 </script>

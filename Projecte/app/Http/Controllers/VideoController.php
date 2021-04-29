@@ -56,9 +56,18 @@ class VideoController extends Controller
             'image' => ['required','image', 'dimensions:min_width=200,min_height=200'],
             'categoria_id' => ['required'],
         ])->validate();
-        $p = $data['video_path']->store('videos');
-        $data['video_path'] = $p;
-        FFMpeg::open($p)->export()->inFormat(new FFMpeg\Format\Video\WebM)->save();
+        
+        $f = $request->file('video_path');
+        $p = $f->store('videos');
+        if ($f->extension() != "webm") {
+            $p = $f->store('videos');
+            #->resize(3840,2160)
+            FFMpeg::open($p)->export()->inFormat(new FFMpeg\Format\Video\WebM)->save(preg_replace('/\\.[^.\\s]{3,4}$/', '', $p).'.webm');
+            Storage::delete($p);
+            $data['video_path'] = preg_replace('/\\.[^.\\s]{3,4}$/', '', $p).'.webm';
+        } else {
+            $data['video_path'] = $p;
+        }
         $p = $data['image']->store('miniaturas');
         $data['image'] = $p;
         $video = new Video($data);
@@ -71,13 +80,14 @@ class VideoController extends Controller
         // Get the search value from the request
         $search = $request->input('search');
 
-        if(User::where('nick',$search)->first()) {
-            $user = User::where('nick',$search)->first();
+        if(User:user:where('nick', 'LIKE', "%{$search}%")->first()) {
+            $user = User::where('nick', 'LIKE', "%{$search}%")->first();
 
-            $id = $user->id;
+            $nick = $user->nick;
+            $username = User::where('nick','LIKE','%'.$search.'%')
             $posts = Video::query()
             ->where('title', 'LIKE', "%{$search}%")
-            ->orWhere('user_id', '=', "{$id}")
+            ->orWhere($username)
             ->orderBy('views','DESC')
             ->get();
         }else {

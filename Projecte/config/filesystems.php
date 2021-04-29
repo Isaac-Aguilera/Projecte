@@ -73,7 +73,12 @@ return [
             'visibility' => 'public',
         ],
         
-
+        'banner' => [
+            'driver' => 'local',
+            'root' => storage_path('app/banner'),
+            'url' => env('APP_URL').'/banner',
+            'visibility' => 'public',
+        ],
     ],
 
     /*
@@ -92,6 +97,7 @@ return [
         public_path('avatars') => storage_path('app/avatars'),
         public_path('videos') => storage_path('app/videos'),
         public_path('miniaturas') => storage_path('app/miniaturas'),
+        public_path('banner') => storage_path('app/banner'),
     ],
 
 ];
