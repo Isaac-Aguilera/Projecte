@@ -22,11 +22,6 @@
                         <div class="alert alert-success">{{ session()->get('message') }}</div> 
                         @endif 
 
-                        <div class="progress">
-                            <div class="bar"></div >
-                            <div class="percent">0%</div >
-                        </div>
-
                         <input id="user_id" type="number" name="user_id" value="{{ Auth::user()->id }}" hidden>
 
                         <div class="form-group row">
@@ -112,28 +107,3 @@
 </div>
 
 @endsection
-
-
-<script type="text/javascript">
-    $(function() {
-         $(document).ready(function()
-         {
-            var bar = $('.bar');
-            var percent = $('.percent');
-            console.log(bar);
-        $('.myform').submit({
-        beforeSend: function() {
-            var percentVal = '0%';
-            bar.width(percentVal);
-            console.log(bar.width);
-            percent.html(percentVal);
-        },
-        uploadProgress: function(event, position, total, percentComplete) {
-            var percentVal = percentComplete + '%';
-            bar.width(percentVal);
-            percent.html(percentVal);
-        }
-      });
-   }); 
- });
-</script>

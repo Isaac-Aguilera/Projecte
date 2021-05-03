@@ -174,10 +174,11 @@ class UserController extends Controller
 
         $id = Auth::user()->id;
         $user = User::find($id);
+        $data['password'] = Hash::make($data['password']);
         $user->fill($data);
         $user->save();
 
-        return redirect()->route('configPassword')->with(['message' => 'Contrasenya actualitzat correctament!']);
+        return redirect()->route('configPassword')->with(['message' => 'Contrasenya actualitzada correctament!']);
     }
 
     /**
