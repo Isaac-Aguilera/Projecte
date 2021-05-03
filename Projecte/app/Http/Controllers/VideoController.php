@@ -22,8 +22,8 @@ class VideoController extends Controller
     {
         
         $video = Video::find($request->route('id'));
-        $video->increment('views',1);
         if (isset($video)) {
+            $video->increment('views',1);
             return view('video.detall')->with(['video' => $video]);
         } else {
             return view('video.detall')->with(['error' => "No s'ha pogut trobar el video!"]);
@@ -55,7 +55,7 @@ class VideoController extends Controller
             'title' => ['required','string','min:5','max:255'],
             'description' => ['required','min:5'],
             'image' => ['required','image', 'dimensions:min_width=200,min_height=200'],
-            'categoria_id' => ['required'],
+            'categoria_id' => ['required','integer'],
         ])->validate();
         
         $f = $request->file('video_path');
@@ -65,13 +65,19 @@ class VideoController extends Controller
         $i = $data['image']->store('miniaturas');
         $data['image'] = $i;
         if ($f->extension() != "webm") {
-            $this->dispatch(new UploadVideo($data));
+
+            $job = new UploadVideo($data);
+            $this->dispatch($job);
+
+           
         }else {
             $video = new Video($data);
             $video->save();
         }
         
+        
         return redirect()->route('pujarVideo')->with(['message' => 'Video penjat correctament']);
+
 
     }
 

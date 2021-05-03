@@ -3,6 +3,9 @@
 	.checked {
 		color: orange;
 	}
+    .perma {
+		color: orange;
+	}
 </style>
 @section('content')
 <div class="container">
@@ -58,6 +61,14 @@
                             onmouseout="cmbst2('video',{{ $i }})" id={{ 'video'.$i }} value={{ $i }}
                             style="background-color: white; border:0;" onclick="valorar('video',{{ $i }},{{ $video->id }})"></button>
                         @endfor
+                        @php
+                            $valoracio = $video->valoracions->where('user_id', '=', Auth::user()->id)->where('name', '=', 'video')->first();
+                            if(isset($valoracio)) {
+                                echo '<script type="text/javascript">
+                                    perma("video",'.$valoracio->valoracio.');
+                                </script>';
+                            }
+                        @endphp 
                         <br>
                         <hr>
                         <h3>Audio quality</h3>
@@ -66,6 +77,14 @@
                             onmouseout="cmbst2('audio',{{ $i }})" id={{ 'audio'.$i }} value={{ $i }}
                             style="background-color: white; border:0;" onclick="valorar('audio',{{ $i }},{{ $video->id }})"></button>
                         @endfor
+                        @php
+                            $valoracio = $video->valoracions->where('user_id', '=', Auth::user()->id)->where('name', '=', 'audio')->first();
+                            if(isset($valoracio)) {
+                                echo '<script type="text/javascript">
+                                    perma("audio",'.$valoracio->valoracio.');
+                                </script>';
+                            }
+                        @endphp 
                         <br>
                         <hr>
                         <h3>Content quality</h3>
@@ -74,6 +93,14 @@
                             onmouseout="cmbst2('content',{{ $i }})" id={{ 'content'.$i }} value={{ $i }}
                             style="background-color: white; border:0;" onclick="valorar('content',{{ $i }},{{ $video->id }})"></button>
                         @endfor
+                        @php
+                            $valoracio = $video->valoracions->where('user_id', '=', Auth::user()->id)->where('name', '=', 'content')->first();
+                            if(isset($valoracio)) {
+                                echo '<script type="text/javascript">
+                                    perma("content",'.$valoracio->valoracio.');
+                                </script>';
+                            }
+                        @endphp 
                         <br>
                     </div>
                     <br>
@@ -182,48 +209,55 @@
     }
 
     function valorar(name, id, video_id) {
-        $.ajax({
-            url: '../valoracio',
-            method: 'post',
-            data: {
-                '_token': '{{ csrf_token() }}',
-                'video_id': video_id,
-                'votacio': id,
-                'name': name 
-            },
-            error: function(response){
-                alert(response['statusText']);
-                //alert("Has de fer login per a poder valorar!");
-            },
-            success: function(response){
-                console.log(response['valoracions']);
-                if (id == 1) {
-			        document.getElementById(name+id.toString()).classList.add('checked');
+        if(document.getElementById(name+(id).toString()).classList.contains('perma') and !document.getElementById(name+(id + 1).toString()).classList.contains('perma')) {
+            $.ajax({
+                url: '../valoracio',
+                method: 'delete',
+                data: {
+                    '_token': '{{ csrf_token() }}',
+                    'video_id': video_id,
+                    'votacio': id,
+                    'name': name 
+                },
+                error: function(response){
+                    if(response['statusText'] == "Unauthorized") {
+                        alert("Has de fer login per a poder valorar!");
+                    } else {
+                        alert(response['statusText']);
+                    } 
+                },
+                success: function(response){
+                    console.log(response['valoracions']);
+                    document.getElementById(name+(1).toString()).classList.remove('perma');
+                    document.getElementById(name+(2).toString()).classList.remove('perma');
+                    document.getElementById(name+(3).toString()).classList.remove('perma');
+                    document.getElementById(name+(4).toString()).classList.remove('perma');
+                    document.getElementById(name+(5).toString()).classList.remove('perma');
                 }
-                if (id == 2) {
-                    document.getElementById(name+(id - 1).toString()).classList.add('checked');
-                    document.getElementById(name+id.toString()).classList.add('checked');
+            });
+        } else {
+            $.ajax({
+                url: '../valoracio',
+                method: 'post',
+                data: {
+                    '_token': '{{ csrf_token() }}',
+                    'video_id': video_id,
+                    'votacio': id,
+                    'name': name 
+                },
+                error: function(response){
+                    if(response['statusText'] == "Unauthorized") {
+                        alert("Has de fer login per a poder valorar!");
+                    } else {
+                        alert(response['statusText']);
+                    } 
+                },
+                success: function(response){
+                    console.log(response['valoracions']);
+                    perma(name,id);
                 }
-                if (id == 3) {
-                    document.getElementById(name+(id - 2).toString()).classList.add('checked');
-                    document.getElementById(name+(id - 1).toString()).classList.add('checked');
-                    document.getElementById(name+id.toString()).classList.add('checked');
-                }
-                if (id == 4) {
-                    document.getElementById(name+(id - 3).toString()).classList.add('checked');
-                    document.getElementById(name+(id - 2).toString()).classList.add('checked');
-                    document.getElementById(name+(id - 1).toString()).classList.add('checked');
-                    document.getElementById(name+id.toString()).classList.add('checked');
-                }
-                if (id == 5) {
-                    document.getElementById(name+(id - 4).toString()).classList.add('checked');
-                    document.getElementById(name+(id - 3).toString()).classList.add('checked');
-                    document.getElementById(name+(id - 2).toString()).classList.add('checked');
-                    document.getElementById(name+(id - 1).toString()).classList.add('checked');
-                    document.getElementById(name+id.toString()).classList.add('checked');
-                }
-            }
-        });
+            });
+        }
 		console.log(document.getElementById(name+(id).toString()).value);
 	}
 
@@ -284,5 +318,42 @@
 			document.getElementById(name+(id - 1).toString()).classList.remove('checked');
 			document.getElementById(name+id.toString()).classList.remove('checked');
 		}
+	}
+    function perma(name, id) {
+		if (id == 1) {
+            document.getElementById(name+id.toString()).classList.add('perma');
+            document.getElementById(name+(id + 1).toString()).classList.remove('perma');
+            document.getElementById(name+(id + 2).toString()).classList.remove('perma');
+            document.getElementById(name+(id + 3).toString()).classList.remove('perma');
+            document.getElementById(name+(id + 4).toString()).classList.remove('perma');
+        }
+        if (id == 2) {
+            document.getElementById(name+(id - 1).toString()).classList.add('perma');
+            document.getElementById(name+id.toString()).classList.add('perma');
+            document.getElementById(name+(id + 1).toString()).classList.remove('perma');
+            document.getElementById(name+(id + 2).toString()).classList.remove('perma');
+            document.getElementById(name+(id + 3).toString()).classList.remove('perma');
+        }
+        if (id == 3) {
+            document.getElementById(name+(id - 2).toString()).classList.add('perma');
+            document.getElementById(name+(id - 1).toString()).classList.add('perma');
+            document.getElementById(name+id.toString()).classList.add('perma');
+            document.getElementById(name+(id + 1).toString()).classList.remove('perma');
+            document.getElementById(name+(id + 2).toString()).classList.remove('perma');
+        }
+        if (id == 4) {    
+            document.getElementById(name+(id - 3).toString()).classList.add('perma');
+            document.getElementById(name+(id - 2).toString()).classList.add('perma');
+            document.getElementById(name+(id - 1).toString()).classList.add('perma');
+            document.getElementById(name+id.toString()).classList.add('perma');
+            document.getElementById(name+(id + 1).toString()).classList.remove('perma');
+        }
+        if (id == 5) {
+            document.getElementById(name+(id - 4).toString()).classList.add('perma');
+            document.getElementById(name+(id - 3).toString()).classList.add('perma');
+            document.getElementById(name+(id - 2).toString()).classList.add('perma');
+            document.getElementById(name+(id - 1).toString()).classList.add('perma');
+            document.getElementById(name+id.toString()).classList.add('perma');
+        }
 	}
 </script>

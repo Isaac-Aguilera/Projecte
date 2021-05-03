@@ -80,6 +80,18 @@
                         </div>
 
                         <div class="form-group row">
+                            <label for="banner" class="col-md-4 col-form-label text-md-right">{{ __('Banner') }}</label>
+                            <div class="col-md-6">                            
+                                <input  class="@error('banner') is-invalid @enderror" id="banner" type="file" name="banner">
+                                @error('banner')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
                             <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
 
                             <div class="col-md-6">

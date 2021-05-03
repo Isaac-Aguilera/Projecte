@@ -142,15 +142,18 @@ class UserController extends Controller
             'surname' => ['required', 'string', 'max:255'],
             'nick' => ['required', 'string', 'max:255', 'unique:users,nick,' . $id],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $id],
-            'file' => ['required', 'image'],
+            'file' => ['image'],
             ])->validate();
 
         $user = User::find($id);
+        $i = $user->image;
         $user->fill($data);
         if (isset($data['file'])) {
             $p = $data['file']->store('avatars');
             Storage::disk('avatars')->delete($user->image);
             $user->image = $p;
+        } else {
+            $user->image = $i;
         }
         $user->save();
 

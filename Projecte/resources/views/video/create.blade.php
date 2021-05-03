@@ -1,6 +1,7 @@
 @extends('layouts.app')
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+
+
 @section('content')
 @stack('styles')
 <link href="{{ asset('css/progress.css') }}" rel="stylesheet">
@@ -15,6 +16,14 @@
                 <div class="card-header">{{ __('Pujar Video') }}</div>
 
                 <div class="card-body">
+
+                    @if(session('jobid'))
+
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" aria-valuenow="{{ $jobid->progress_now }}" aria-valuemin="0" aria-valuemax="100" style="width:60%;"></div>
+                    </div>
+
+                    @else
                     <form method="POST" class="myform" action="{{ route('pujarVideo') }}" enctype="multipart/form-data">
                         @csrf
 
@@ -78,16 +87,16 @@
                         <div class="form-group row">
                             <label for="categoria" class="col-md-4 col-form-label text-md-right">{{ __('Categoria') }}</label>
                             <div class="col-md-6">
-                                <select id="categoria_id" name="categoria_id" class="custom-select" aria-label="Default select example">
-                                    <option selected>Selecciona una categoria</option>
+                                <select id="categoria_id" name="categoria_id" class="custom-select @error('categoria_id') is-invalid @enderror" aria-label="Default select example">
+                                    <option value="No puede ser!" selected>Selecciona una categoria</option>
                                     @foreach($categories as $categoria)
                                         <option value="{{ $categoria->id }}">{{ $categoria->name }}</option>
                                     @endforeach
                                 </select>
                           
-                                @error('image')
+                                @error('categoria_id')
                                     <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
+                                        <strong>"You have to select a category!</strong>
                                     </span>
                                 @enderror
                             </div>
@@ -100,6 +109,7 @@
                             </div>
                         </div>
                     </form>
+                    @endif
                 </div>
             </div>
         </div>

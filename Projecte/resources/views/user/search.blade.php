@@ -33,8 +33,8 @@
                         @foreach($posts as $video)
 
                         <div class="col-lg-12 col-md-12 col-sm-12">
-        
-                            <div class="card mb-4 shadow">
+    
+                            <div class="card mb-4">
                                 
                                 <div class="card-body">
                                     <div class="row">

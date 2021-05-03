@@ -55,6 +55,7 @@ class RegisterController extends Controller
             'nick' => ['required', 'string', 'max:255', 'unique:users'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'avatar' => ['required','image'],
+            'banner' => ['required','image'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
     }
@@ -73,6 +74,10 @@ class RegisterController extends Controller
             $filename = $request->avatar->store('avatars');
         }
 
+        $filenameban = "";
+        if($request->hasFile('banner')){
+            $filenameban = $request->banner->store('banner');
+        }
 
         return User::create([
             'role' => 'user',
@@ -81,6 +86,7 @@ class RegisterController extends Controller
             'nick' => $data['nick'],
             'email' => $data['email'],
             'image' => $filename,
+            'banner' => $filenameban,
             'password' => Hash::make($data['password']),
         ]);
     }

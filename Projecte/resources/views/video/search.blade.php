@@ -40,7 +40,7 @@
                                             {{ \FormatTime::LongTimeFilter($video->created_at) }}
                                         </span><br><br>
     
-                                            <a href="{{ route('user', $video->user->id) }}">
+                                            <a href="{{ route('user', $video->user->nick) }}">
                                                 <img class="mr-1"
                                                     style="border-radius:50%;width:2.5vw;min-width:40px;min-height:40px;"
                                                     src="../{{ $video->user->image }}">

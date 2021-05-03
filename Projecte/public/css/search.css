@@ -1,11 +1,17 @@
 @media (max-width: 1200px) { 
     .miniaturas  {
-        height: 150px;
+        width: 337px;
+        height: 225px;
+        object-fit: fill;
     }
+
+
  }
 
  @media (min-width: 1201px) { 
     .miniaturas  {
-        height: 257px;
+        width: 337px;
+        height: 255px;
+        object-fit: fill;
     }
  }
