@@ -4,7 +4,7 @@
 <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
 @section('content')
 <main class="main" role="main">
-    <div class="container bg-white shadow p-5 rounded">
+    <div class="container bg-white shadow rounded">
       
         @if (isset($error))
         <div class="card">

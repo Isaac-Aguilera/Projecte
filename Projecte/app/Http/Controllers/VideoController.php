@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\Video;
 use App\Models\User;
+use App\Models\Valoracio;
 use App\Jobs\UploadVideo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -24,7 +25,7 @@ class VideoController extends Controller
         $video = Video::find($request->route('id'));
         if (isset($video)) {
             $video->increment('views',1);
-            return view('video.detall')->with(['video' => $video]);
+            return view('video.detall')->with(['video' => $video,'valoracions' => Valoracio::all()->where('video_id', '=', $video->id)->groupBy('name')]);
         } else {
             return view('video.detall')->with(['error' => "No s'ha pogut trobar el video!"]);
         }

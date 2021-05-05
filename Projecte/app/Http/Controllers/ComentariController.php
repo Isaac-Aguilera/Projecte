@@ -4,9 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Models\Comentari;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class ComentariController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -35,7 +41,15 @@ class ComentariController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request['user_id'] = Auth::user()->id;
+        $data = $request->all();
+        Validator::make($data, [
+            'contingut' => ['string', 'max:500']
+        ])->validate();
+        $comentari = new Comentari($data);
+        $comentari->save();
+        
+        return redirect()->route('video', $comentari->video_id)->with(['message' => 'Comentari Penjat correctament']);
     }
 
     /**
@@ -75,11 +89,16 @@ class ComentariController extends Controller
     /**
      * Remove the specified resource from storage.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Comentari  $comentari
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Comentari $comentari)
+    public function destroy(Request $request, Comentari $comentari)
     {
-        //
+        $id = $request->route('id');
+        $comentari = Comentari::find($id);
+        $video_id = $comentari->video_id;
+        $comentari->delete();
+        return redirect()->route('video', $video_id)->with(['message' => 'Comentari eliminat correctament']);
     }
 }

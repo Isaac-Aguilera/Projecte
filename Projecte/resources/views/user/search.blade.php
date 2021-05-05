@@ -4,7 +4,7 @@
 <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
 @section('content')
 <main class="main" role="main">
-    <div class="container bg-white shadow p-5 rounded">
+    <div class="container bg-white shadow rounded">
       
         @if (isset($error))
         <div class="card">
@@ -14,15 +14,7 @@
             </div>
         </div>
         @else
-        <div class="row">
-            <div class="col-12 w-100">
-                <a href="{{ route('user', $user->nick) }}">
-                    <img class="mr-1" style="border-radius:50%;width:5.5vw;min-width:80px;min-height:80px;"
-                        src="../../{{ $user->image }}">
-                </a>
-                <strong><span class="h1 pl-3">{{ $user->nick }}</span></strong>
-            </div>
-        </div>
+        
         @include('layouts.users')
         @section('user-content')
         @stop

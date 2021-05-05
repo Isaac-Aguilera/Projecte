@@ -1,11 +1,15 @@
+@stack('styles')
+<link href="{{ asset('css/users.css') }}" rel="stylesheet">
+
 <div class="row">
-    <div class="col-12">
-        <img class="w-100 mb-3" src="/{{ $user->banner }}">
+    <div class="col-12 p-0 mb-3 position-relative">
+        <img class="banner w-100" src="/{{ $user->banner }}">
+        <button class="btn btn-light position-absolute fixed-top" style="border-radius: 0;"><i class="bi bi-pencil-fill" style="font-size: 1.5rem;"></i></button>
     </div>
 </div>
 @if(Auth::user()->id == $user->id)
         <div class="row">
-            <div class="col-6">
+            <div class="col-8">
                 <a href="{{ route('user', $user->nick) }}">
                     <img class="mr-1" style="border-radius:50%;width:5.5vw;min-width:80px;min-height:80px;"
                         src="/{{ $user->image }}">
@@ -13,8 +17,7 @@
                 <strong><span class="h1 pl-3 fw">{{ $user->nick }}</span></strong>
             </div>
 
-            <div class="col-lg-6 col-md-6 col-sm-6 mt-3 d-flex justify-content-end">
-                <div class="">
+            <div class="col-4 mt-3 ">
                     <a href="{{ route('pujarVideo') }}"><button class="btn btn-outline-dark">UPLOAD</button></a>
                 
                     <div class="btn-group">
@@ -26,15 +29,13 @@
                           <a class="dropdown-item" href="{{ route('configPassword') }}">CHANGE PASSWORD</a>
                       </div>
                     </div>
-                    <button class="btn btn-outline-dark">PERSONALIZE CHANNEL</button>
-                </div>
             </div>   
         </div>
         @else
 
         <div class="row">
             <div class="col-12 w-100">
-                <a href="{{ route('user', $user->nick) }}">
+                <a href="{{ route('user', $user->nick) }}"> 
                     <img class="mr-1" style="border-radius:50%;width:5.5vw;min-width:80px;min-height:80px;"
                         src="../../{{ $user->image }}">
                 </a>

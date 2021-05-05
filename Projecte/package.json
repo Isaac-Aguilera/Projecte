@@ -351,6 +351,7 @@
         "isexe": "^2.0.0",
         "isobject": "^3.0.1",
         "jest-worker": "^26.6.2",
+        "jquery-bootstrap-scrolling-tabs": "^2.6.1",
         "js-tokens": "^4.0.0",
         "js-yaml": "^3.14.1",
         "jsesc": "^2.5.2",

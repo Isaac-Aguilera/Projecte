@@ -5,6 +5,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\VideoController;
 use App\Http\Controllers\VotController;
 use App\Http\Controllers\ValoracioController;
+use App\Http\Controllers\ComentariController;
 
 /*
 |--------------------------------------------------------------------------
@@ -46,3 +47,7 @@ Route::get('/user/{nick}/info', [UserController::class, 'userinfo'])->name('user
 Route::get('/user/{nick}/search', [UserController::class, 'usersearch'])->name('usersearch');
 
 Route::post('/valoracio', [ValoracioController::class, 'store'])->name('valoracio');
+Route::delete('/valoracio', [ValoracioController::class, 'destroy'])->name('valoracio');
+
+Route::post('/comentari', [ComentariController::class, 'store'])->name('comentari');
+Route::delete('/comentari/{id}', [ComentariController::class, 'destroy'])->name('eliminarComentari');

@@ -55,9 +55,21 @@ class ValoracioController extends Controller
             $valoracio->valoracio = $valor;
         }
         $valoracio->save();
-        //Valoracio::select(sum('valoracio')/count('name'))->where('video_id', '=', $video_id)->groupBy('name')->get()
+
+        $mitjanes = array();
+        $valoracions = Valoracio::all()->where('video_id', '=', $video_id)->groupBy('name');
+        foreach($valoracions as $nom => $name) {
+            $contador = 0;
+            $suma = 0;
+            foreach($name as $id => $valoracio) {
+                $contador = $contador + 1;
+                $suma = $suma + $valoracio['valoracio'];
+            }
+            $mitjanes[$nom] = $suma / $contador;
+        }
         return array( 
-            'valoracions' => "aigua"
+            'mitjanes' => $mitjanes
+            
         );
     }
 
@@ -98,11 +110,31 @@ class ValoracioController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Valoracio  $valoracio
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Valoracio $valoracio)
+    public function destroy(Request $request)
     {
-        //
+        $video_id = $request->all()['video_id'];
+        $user_id = Auth::user()->id;
+        $name = $request->all()['name'];
+        $valoracio = Valoracio::all()->where('user_id', '=', $user_id)->where('video_id', '=', $video_id)->where('name', '=', $name)->first();
+        $valoracio->delete();
+        
+        $mitjanes = array();
+        $valoracions = Valoracio::all()->where('video_id', '=', $video_id)->groupBy('name');
+        foreach($valoracions as $nom => $name) {
+            $contador = 0;
+            $suma = 0;
+            foreach($name as $id => $valoracio) {
+                $contador = $contador + 1;
+                $suma = $suma + $valoracio['valoracio'];
+            }
+            $mitjanes[$nom] = $suma / $contador;
+        }
+        return array( 
+            'mitjanes' => $mitjanes
+            
+        );
     }
 }

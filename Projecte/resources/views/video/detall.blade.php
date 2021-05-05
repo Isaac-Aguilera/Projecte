@@ -54,8 +54,22 @@
                             <i id="dislike_{{ $video->id }}" class="bi bi-hand-thumbs-down" onclick="like({{ $video->id }}, 'dislike')"></i>
                             <span id="dislike_{{ $video->id }}_count">{{ $video->vots->where('votacio', '=', false)->count() }}</span>
                         @endif
+
+                        @php
+                            $mitjanes = array();
+                            foreach($valoracions as $nom => $name) {
+                                $contador = 0;
+                                $suma = 0;
+                                foreach($name as $id => $valoracio) {
+                                    $contador = $contador + 1;
+                                    $suma = $suma + $valoracio['valoracio'];
+                                }
+                                $mitjanes[$nom] = $suma / $contador;
+                            }
+                        @endphp 
                         <hr>
                         <h3>Video quality</h3>
+                        <h5 id=video>{{ isset($mitjanes['video']) ? $mitjanes['video'] : '' }}</h5>
                         @for ($i = 1; $i < 6; $i++)
                             <button class="fa fa-star" onmouseover="cmbst('video',{{ $i }})"
                             onmouseout="cmbst2('video',{{ $i }})" id={{ 'video'.$i }} value={{ $i }}
@@ -72,6 +86,7 @@
                         <br>
                         <hr>
                         <h3>Audio quality</h3>
+                        <h5 id=audio>{{ isset($mitjanes['audio']) ? $mitjanes['audio'] : '' }}</h5>
                         @for ($i = 1; $i < 6; $i++)
                             <button class="fa fa-star" onmouseover="cmbst('audio',{{ $i }})"
                             onmouseout="cmbst2('audio',{{ $i }})" id={{ 'audio'.$i }} value={{ $i }}
@@ -88,6 +103,7 @@
                         <br>
                         <hr>
                         <h3>Content quality</h3>
+                        <h5 id=content>{{ isset($mitjanes['content']) ? $mitjanes['content'] : '' }}</h5>
                         @for ($i = 1; $i < 6; $i++)
                             <button class="fa fa-star" onmouseover="cmbst('content',{{ $i }})"
                             onmouseout="cmbst2('content',{{ $i }})" id={{ 'content'.$i }} value={{ $i }}
@@ -111,13 +127,30 @@
                         <br>
                         @if ($video->comentaris->count() == 0)
                             <h5>No hi han comentaris!</h5>
+                            <hr>
                         @else
                             @foreach ($video->comentaris as $comentari)
                                 <h5>{{ $comentari->user->nick }} </h5>
+                                @if($comentari->user_id === Auth::user()->id || $comentari->video->user->id === Auth::user()->id)
+                                    <form method="POST" action="{{ route('eliminarComentari', $comentari->id) }}">
+                                        @method('DELETE')
+                                        @csrf
+                                        <button class="btn btn-primary" type="submit" >✘</button>
+                                    </form>
+                                @endif
                                 <p>{{ $comentari->contingut }}</p>
                                 <hr>
                             @endforeach
                         @endif
+                        <form method="POST" action="{{ route('comentari') }}">
+                            @method('POST')
+                            @csrf
+                            <input type="number" name="video_id" id="video_id" value="{{ $video->id }}" hidden>
+                            <textarea placeholder="Write a comment!" name="contingut" id="contingut" cols="50" rows="5"></textarea>
+                            <br>
+                            <br>
+                            <button class="btn btn-primary" type="submit">Enviar</button>
+                        </form>
                     </div>
                 </div>
             @endif
@@ -209,14 +242,13 @@
     }
 
     function valorar(name, id, video_id) {
-        if(document.getElementById(name+(id).toString()).classList.contains('perma') and !document.getElementById(name+(id + 1).toString()).classList.contains('perma')) {
+        if(document.getElementById(name+(id).toString()).classList.contains('perma') && (id + 1 == 6 || !document.getElementById(name+(id + 1).toString()).classList.contains('perma'))) {
             $.ajax({
                 url: '../valoracio',
                 method: 'delete',
                 data: {
                     '_token': '{{ csrf_token() }}',
                     'video_id': video_id,
-                    'votacio': id,
                     'name': name 
                 },
                 error: function(response){
@@ -227,7 +259,9 @@
                     } 
                 },
                 success: function(response){
-                    console.log(response['valoracions']);
+                    Object.entries(response['mitjanes']).forEach(([key, value])=> {
+                        document.getElementById(key).innerHTML = value;
+                    });
                     document.getElementById(name+(1).toString()).classList.remove('perma');
                     document.getElementById(name+(2).toString()).classList.remove('perma');
                     document.getElementById(name+(3).toString()).classList.remove('perma');
@@ -253,12 +287,13 @@
                     } 
                 },
                 success: function(response){
-                    console.log(response['valoracions']);
+                    Object.entries(response['mitjanes']).forEach(([key, value])=> {
+                        document.getElementById(key).innerHTML = value;
+                    });
                     perma(name,id);
                 }
             });
         }
-		console.log(document.getElementById(name+(id).toString()).value);
 	}
 
 	function cmbst(name, id) {
