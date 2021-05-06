@@ -46,17 +46,46 @@
 
 
     function editDesc() {
-        console.log("holaa")
+       
         $valueDesc = document.getElementById("descSpan").innerHTML;
         $colDesc = document.getElementById("colDesc");
         $colDesc.innerHTML = "";
-
-        $colDesc.innerHTML += '<input id="ShowButton" class="btn btn-success" type="submit" value="Save">';
-        $colDesc.innerHTML += '<textarea class="ml-2" rows="5" cols="50">'+$valueDesc+'</textarea>';
+        
+        $colDesc.innerHTML += '<p class="font-weight-bold">Description</p>';
+        $colDesc.innerHTML += '<hr>';
+        $colDesc.innerHTML += '<input id="ShowButton" class="btn btn-success" type="submit" value="Save" onclick="guardarDesc()">';
+        $colDesc.innerHTML += '<textarea id="desctextarea" class="ml-2" rows="5" cols="50">'+$valueDesc+'</textarea>';
 
 
     }
 
+    function guardarDesc() {
+
+        desc = document.getElementById("desctextarea").value;
+
+        console.log(desc);
+        $.ajax({
+                    url: '/canviardesc',
+                    method: 'POST',
+                    data: {
+                        '_token': '{{ csrf_token() }}',
+                        'desc': desc,
+                    },
+                    error: function(response){
+                        alert(response['statusText']);
+                    },
+                    success: function(response) {
+                        $colDesc = document.getElementById("colDesc");
+                        $colDesc.innerHTML = "";
+
+                        $colDesc.innerHTML += '<p class="font-weight-bold">Description</p>';
+                        $colDesc.innerHTML += '<hr>';
+                        $colDesc.innerHTML += '<button id="desc" class="btn btn-light" style="border-radius: 0;" onclick="editDesc()"><i class="bi bi-pencil-fill" style="font-size: 1.5rem;"></i></button>';
+                        $colDesc.innerHTML += '<span id="descSpan" class="ml-2">'+desc+'</span>';
+
+                    }
+                });
+    }
+
 </script>
-<!--<input id="ShowButton" class="btn btn-success" type="submit" value="Save">
-<textarea class="ml-2" rows="5" cols="50">{{ $user->channel_desc }}</textarea>-->
+    
