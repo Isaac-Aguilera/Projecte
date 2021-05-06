@@ -184,6 +184,11 @@ class UserController extends Controller
         return redirect()->route('configPassword')->with(['message' => 'Contrasenya actualitzada correctament!']);
     }
 
+
+    public function canviardesc(Request $request) {
+        Auth::user()->channel_desc = $request["desc"];
+        Auth::user()->save();
+    }
     /**
      * Remove the specified resource from storage.
      *

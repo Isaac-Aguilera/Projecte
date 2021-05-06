@@ -51,3 +51,5 @@ Route::delete('/valoracio', [ValoracioController::class, 'destroy'])->name('valo
 
 Route::post('/comentari', [ComentariController::class, 'store'])->name('comentari');
 Route::delete('/comentari/{id}', [ComentariController::class, 'destroy'])->name('eliminarComentari');
+
+Route::post('/canviardesc', [UserController::class, 'canviardesc'])->name('canviardesc');

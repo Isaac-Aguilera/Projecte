@@ -8,6 +8,7 @@
 	}
 </style>
 @section('content')
+
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
@@ -76,11 +77,13 @@
                             style="background-color: white; border:0;" onclick="valorar('video',{{ $i }},{{ $video->id }})"></button>
                         @endfor
                         @php
-                            $valoracio = $video->valoracions->where('user_id', '=', Auth::user()->id)->where('name', '=', 'video')->first();
-                            if(isset($valoracio)) {
-                                echo '<script type="text/javascript">
-                                    perma("video",'.$valoracio->valoracio.');
-                                </script>';
+                            if(Auth::user() !== null) {
+                                $valoracio = $video->valoracions->where('user_id', '=', Auth::user()->id)->where('name', '=', 'video')->first();
+                                if(isset($valoracio)) {
+                                    echo '<script type="text/javascript">
+                                        perma("video",'.$valoracio->valoracio.');
+                                    </script>';
+                                }
                             }
                         @endphp 
                         <br>
@@ -93,12 +96,15 @@
                             style="background-color: white; border:0;" onclick="valorar('audio',{{ $i }},{{ $video->id }})"></button>
                         @endfor
                         @php
-                            $valoracio = $video->valoracions->where('user_id', '=', Auth::user()->id)->where('name', '=', 'audio')->first();
-                            if(isset($valoracio)) {
-                                echo '<script type="text/javascript">
-                                    perma("audio",'.$valoracio->valoracio.');
-                                </script>';
+                            if(Auth::user() !== null) {
+                                $valoracio = $video->valoracions->where('user_id', '=', Auth::user()->id)->where('name', '=', 'audio')->first();
+                                if(isset($valoracio)) {
+                                    echo '<script type="text/javascript">
+                                        perma("audio",'.$valoracio->valoracio.');
+                                    </script>';
+                                }
                             }
+                            
                         @endphp 
                         <br>
                         <hr>
@@ -110,11 +116,13 @@
                             style="background-color: white; border:0;" onclick="valorar('content',{{ $i }},{{ $video->id }})"></button>
                         @endfor
                         @php
-                            $valoracio = $video->valoracions->where('user_id', '=', Auth::user()->id)->where('name', '=', 'content')->first();
-                            if(isset($valoracio)) {
-                                echo '<script type="text/javascript">
-                                    perma("content",'.$valoracio->valoracio.');
-                                </script>';
+                            if(Auth::user() !== null) {
+                                $valoracio = $video->valoracions->where('user_id', '=', Auth::user()->id)->where('name', '=', 'content')->first();
+                                if(isset($valoracio)) {
+                                    echo '<script type="text/javascript">
+                                        perma("content",'.$valoracio->valoracio.');
+                                    </script>';
+                                }
                             }
                         @endphp 
                         <br>
@@ -131,12 +139,14 @@
                         @else
                             @foreach ($video->comentaris as $comentari)
                                 <h5>{{ $comentari->user->nick }} </h5>
-                                @if($comentari->user_id === Auth::user()->id || $comentari->video->user->id === Auth::user()->id)
-                                    <form method="POST" action="{{ route('eliminarComentari', $comentari->id) }}">
-                                        @method('DELETE')
-                                        @csrf
-                                        <button class="btn btn-primary" type="submit" >✘</button>
-                                    </form>
+                                @if(Auth::user() !== null) {
+                                    @if($comentari->user_id === Auth::user()->id || $comentari->video->user->id === Auth::user()->id)
+                                        <form method="POST" action="{{ route('eliminarComentari', $comentari->id) }}">
+                                            @method('DELETE')
+                                            @csrf
+                                            <button class="btn btn-primary" type="submit" >✘</button>
+                                        </form>
+                                    @endif
                                 @endif
                                 <p>{{ $comentari->contingut }}</p>
                                 <hr>
