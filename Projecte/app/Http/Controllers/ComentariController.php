@@ -48,8 +48,9 @@ class ComentariController extends Controller
         ])->validate();
         $comentari = new Comentari($data);
         $comentari->save();
+        $comentaris = $comentari->video->comentaris->take(2)->count();
         
-        return redirect()->route('video', $comentari->video_id)->with(['message' => 'Comentari Penjat correctament']);
+        return array('comentaris' => $comentaris,'id' => $comentari->id, 'nick' => $comentari->user->nick);
     }
 
     /**
@@ -97,8 +98,11 @@ class ComentariController extends Controller
     {
         $id = $request->route('id');
         $comentari = Comentari::find($id);
-        $video_id = $comentari->video_id;
+        $video = $comentari->video;
+        $video_id = $video->id;
         $comentari->delete();
-        return redirect()->route('video', $video_id)->with(['message' => 'Comentari eliminat correctament']);
+        
+        $comentaris = $video->comentaris->take(1)->count();
+        return array('comentaris' => $comentaris);
     }
 }
