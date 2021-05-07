@@ -50,13 +50,10 @@
         $valueDesc = document.getElementById("descSpan").innerHTML;
         $colDesc = document.getElementById("colDesc");
         $colDesc.innerHTML = "";
-        
         $colDesc.innerHTML += '<p class="font-weight-bold">Description</p>';
         $colDesc.innerHTML += '<hr>';
-        $colDesc.innerHTML += '<input id="ShowButton" class="btn btn-success" type="submit" value="Save" onclick="guardarDesc()">';
-        $colDesc.innerHTML += '<textarea id="desctextarea" class="ml-2" rows="5" cols="50">'+$valueDesc+'</textarea>';
-
-
+        $colDesc.innerHTML += '<textarea id="desctextarea" class="form-control" rows="5">'+$valueDesc+'</textarea><br>';
+        $colDesc.innerHTML += '<input id="ShowButton" class="btn btn-lg btn-block btn-success mb-3" type="submit" value="Save" onclick="guardarDesc()">';
     }
 
     function guardarDesc() {

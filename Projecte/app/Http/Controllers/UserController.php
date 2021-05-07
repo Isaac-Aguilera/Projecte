@@ -189,6 +189,12 @@ class UserController extends Controller
         Auth::user()->channel_desc = $request["desc"];
         Auth::user()->save();
     }
+
+    public function canviarbanner(Request $request) {
+        $f = $request->file("file");
+        var_dump($f);
+        die();
+    }
     /**
      * Remove the specified resource from storage.
      *

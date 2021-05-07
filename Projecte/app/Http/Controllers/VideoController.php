@@ -62,6 +62,7 @@ class VideoController extends Controller
         $f = $request->file('video_path');
 
         $p = $f->store('videos');
+        
         $data['video_path'] = $p;
         $i = $data['image']->store('miniaturas');
         $data['image'] = $i;

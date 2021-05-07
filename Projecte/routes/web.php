@@ -53,3 +53,5 @@ Route::post('/comentari', [ComentariController::class, 'store'])->name('comentar
 Route::delete('/comentari/{id}', [ComentariController::class, 'destroy'])->name('eliminarComentari');
 
 Route::post('/canviardesc', [UserController::class, 'canviardesc'])->name('canviardesc');
+
+Route::post('/canviarbanner', [UserController::class, 'canviarbanner'])->name('canviarbanner');

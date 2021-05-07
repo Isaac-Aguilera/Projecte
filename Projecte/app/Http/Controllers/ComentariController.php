@@ -50,7 +50,7 @@ class ComentariController extends Controller
         $comentari->save();
         $comentaris = $comentari->video->comentaris->take(2)->count();
         
-        return array('comentaris' => $comentaris,'id' => $comentari->id, 'nick' => $comentari->user->nick);
+        return array('comentaris' => $comentaris,'id' => $comentari->id, 'nick' => $comentari->user->nick, 'image' => $comentari->user->image);
     }
 
     /**
