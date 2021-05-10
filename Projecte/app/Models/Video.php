@@ -74,4 +74,11 @@ class Video extends Model
     {
         return $this->hasMany('App\Models\Vot', 'video_id');
     }
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function notificacions()
+    {
+        return $this->hasMany('App\Models\Notificacio', 'video_id');
+    }
 }

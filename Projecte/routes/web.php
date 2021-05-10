@@ -50,6 +50,7 @@ Route::post('/valoracio', [ValoracioController::class, 'store'])->name('valoraci
 Route::delete('/valoracio', [ValoracioController::class, 'destroy'])->name('valoracio');
 
 Route::post('/comentari', [ComentariController::class, 'store'])->name('comentari');
+Route::post('/editarComentari/{id}', [ComentariController::class, 'update'])->name('editarComentari');
 Route::delete('/comentari/{id}', [ComentariController::class, 'destroy'])->name('eliminarComentari');
 
 Route::post('/canviardesc', [UserController::class, 'canviardesc'])->name('canviardesc');

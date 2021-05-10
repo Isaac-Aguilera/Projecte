@@ -5,10 +5,32 @@
 
 
 <div class="row">
-    <div id="bannerdiv" class="col-12 p-0 mb-3 position-relative">
-        
-        <img class="banner w-100" src="/{{ $user->banner }}">
-        <button class="btn btn-light position-absolute fixed-top" style="border-radius: 0;" onclick="canviarBanner()"><i class="bi bi-pencil-fill" style="font-size: 1.5rem;"></i></button>
+
+    <div id="bannerdiv" class="col-12 p-0 mb-5 position-relative">
+
+        @if ($user->banner == null)
+          @if (session('incorrecte')) 
+          <div class="alert alert-danger">{{ session()->get('incorrecte') }}</div>
+          @endif
+          @if($user->id == Auth::user()->id)
+          <button class="btn btn-light position-absolute fixed-top" style="border-radius: 0;" onclick="canviarBanner()"><i class="bi bi-pencil-fill" style="font-size: 1.5rem;"></i></button>
+          @endif
+        @else
+        @if (session('correcte')) 
+          <img class="centered-and-cropped w-100"  height="200" src="/{{ $user->banner }}">
+          @if($user->id == Auth::user()->id)
+          <button class="btn btn-light position-absolute fixed-top" style="border-radius: 0;" onclick="canviarBanner()"><i class="bi bi-pencil-fill" style="font-size: 1.5rem;"></i></button>
+          @endif
+        @else
+          @if (session('incorrecte')) 
+          <div class="alert alert-danger">{{ session()->get('incorrecte') }}</div>
+          @endif
+          <img class="centered-and-cropped w-100"  height="200" src="/{{ $user->banner }}">
+            @if($user->id == Auth::user()->id)
+          <button class="btn btn-light position-absolute fixed-top" style="border-radius: 0;" onclick="canviarBanner()"><i class="bi bi-pencil-fill" style="font-size: 1.5rem;"></i></button>
+          @endif
+        @endif
+        @endif
     </div>
 </div>
 @if(Auth::user()->id == $user->id)
@@ -79,13 +101,11 @@
 
 <script>
     function canviarBanner() {
-
-      console.log("pol");
       divbann = document.getElementById("bannerdiv");
       console.log(divbann.innerHTML);
       divbann.innerHTML = "";
 
-      divbann.innerHTML += '<div><div class="container"><div class="row"><div class="col-md-12"><div class="form-group"><label id="proba" class="control-label">Upload File</label><div class="preview-zone hidden"><div class="box box-solid"><div class="box-header with-border"><div><b>Preview</b></div><div class="box-tools pull-right"><button type="button" class="btn btn-danger btn-xs remove-preview"><i class="fa fa-times"></i> Reset The Field</button></div></div><div class="box-body"></div></div></div><div class="dropzone-wrapper"><div class="dropzone-desc"><i class="glyphicon glyphicon-download-alt"></i><p>Choose an image file or drag it here.</p></div><input id="imatgepujada" type="file" name="img_logo" class="dropzone"></div></div></div></div><div class="row"><div class="col-md-12"><button onclick="updateBanner()" class="btn btn-primary pull-right">Upload</button></div></div></div></div>';
+      divbann.innerHTML += '<form method="POST" action="{{ route("canviarbanner") }}" enctype="multipart/form-data">@csrf<div class="container"><div class="row"><div class="col-md-12"><div class="form-group"><label id="proba" class="control-label">Change Banner</label><div class="preview-zone hidden"><div class="box box-solid"><div class="box-header with-border"><div><b>Preview</b></div><div class="box-tools pull-right"><button type="button" class="btn btn-danger btn-xs remove-preview"><i class="fa fa-times"></i> Reset The Field</button></div></div><div class="box-body"></div></div></div><div class="dropzone-wrapper"><div class="dropzone-desc"><i class="glyphicon glyphicon-download-alt"></i><p>Choose an image file or drag it here.</p></div><input id="img_logo"  type="file" name="img_logo" class="dropzone"></div></div></div></div><div class="row"><div class="col-md-12"><button type="submit" class="btn btn-primary pull-right">Upload</button></div></div></div></form>';
       $( document ).ready(function() {
 
         function readFile(input) {
@@ -117,26 +137,22 @@
       }
 
       $(".dropzone").change(function() {
-        console.log("error");
         readFile(this);
       });
 
       $('.dropzone-wrapper').on('dragover', function(e) {
-        console.log("error");
         e.preventDefault();
         e.stopPropagation();
         $(this).addClass('dragover');
       });
 
       $('.dropzone-wrapper').on('dragleave', function(e) {
-        console.log("error");
         e.preventDefault();
         e.stopPropagation();
         $(this).removeClass('dragover');
       });
 
       $('.remove-preview').on('click', function() {
-        console.log("error");
         var boxZone = $(this).parents('.preview-zone').find('.box-body');
         var previewZone = $(this).parents('.preview-zone');
         var dropzone = $(this).parents('.form-group').find('.dropzone');
@@ -147,30 +163,7 @@
     });
   }
 
-  function updateBanner() {
-    file = document.getElementById("imatgepujada");
-    $.ajax({
-                    url: '/canviarbanner',
-                    method: 'POST',
-                    data: {
-                        '_token': '{{ csrf_token() }}',
-                        'file': file,
-                    },
-                    error: function(response){
-                        alert(response['statusText']);
-                    },
-                    success: function(response) {
-                        $colDesc = document.getElementById("colDesc");
-                        $colDesc.innerHTML = "";
-
-                        $colDesc.innerHTML += '<p class="font-weight-bold">Description</p>';
-                        $colDesc.innerHTML += '<hr>';
-                        $colDesc.innerHTML += '<button id="desc" class="btn btn-light" style="border-radius: 0;" onclick="editDesc()"><i class="bi bi-pencil-fill" style="font-size: 1.5rem;"></i></button>';
-                        $colDesc.innerHTML += '<span id="descSpan" class="ml-2">'+desc+'</span>';
-
-                    }
-                });
-  }
+  
 
 
     

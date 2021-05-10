@@ -1,3 +1,23 @@
+function editarComentari(id, contingut, token) {
+    document.getElementById((id+'_contingut').toString()).innerHTML = '<textarea name="contingut" id="'+id+'_area" class="form-control" rows="5">'+contingut+'</textarea><button onclick="confirmarEditarComentari('+id+', \''+token+'\')" class="btn btn-large btn-block btn-primary mt-3">Confirmar</button>';
+}
+function confirmarEditarComentari(id, token) {
+    contingut = document.getElementById((id+'_area').toString()).value;
+    $.ajax({
+        url: '/editarComentari/'+id,
+        method: 'post',
+        data: {
+            '_token': token,
+            'contingut': contingut
+        },
+        error: function(response){
+            alert(response['statusText']);
+        },
+        success: function(response) {
+            document.getElementById((id+'_contingut').toString()).innerHTML = '<p>'+contingut+'</p>';
+        }
+    });
+}
 function eliminarComentari(id, token) {
     $.ajax({
         url: '/comentari/'+id,
@@ -9,7 +29,6 @@ function eliminarComentari(id, token) {
             alert(response['statusText']);
         },
         success: function(response) {
-            console.log();
             if(!response['comentaris']) {
                 document.getElementById('comentaris').innerHTML += '<h5>No hi han comentaris!</h5><hr>';
             }
@@ -32,7 +51,9 @@ function afegirComentari(video_id, token) {
             alert("Has de fer login per a poder comentar!");
         },
         success: function(response) {
-            afegir = '<div id='+response['id']+'><a href="/user/'+response['nick']+'"><img class="mr-1"style="border-radius:50%;width:2.5vw;min-width:40px;min-height:40px;"src="/'+response['image']+'"></a><span>'+response['nick']+'</span><button onclick="eliminarComentari('+response['id']+')" class="btn btn-primary" type="submit" >✘</button><p>'+contingut+'</p><hr></div>'
+            afegir = '<div id='+response['id']+'>'+
+                '<a href="/user/'+response['nick']+'">'+
+                    '<img class="mr-1"style="border-radius:50%;width:2.5vw;min-width:40px;min-height:40px;"src="/'+response['image']+'"></a><span>'+response['nick']+'</span><div class="dropdown"><button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="bi bi-three-dots-vertical"></i></button><div class="dropdown-menu" aria-labelledby="dropdownMenuButton"><button onclick="editarComentari('+response['id']+', \''+contingut+'\', \''+token+'\')" class="dropdown-item" >Editar</button><button onclick="eliminarComentari('+response['id']+', \''+token+'\')" class="dropdown-item" >Eliminar</button></div></div><div id=\''+response['id']+'_contingut\'><p class="mt-2 ml-5">'+contingut+'</p></div><hr></div>'
             if(response['comentaris']==1) {
                 document.getElementById('comentaris').innerHTML = afegir;
             } else {
@@ -44,9 +65,9 @@ function afegirComentari(video_id, token) {
 }
 function like(id,votacio, token) {
     if (votacio == 'like') {
-        if (document.getElementById("like_"+id).className == "bi bi-hand-thumbs-up") {
+        if(document.getElementById("like_"+id).className == "bi bi-hand-thumbs-up") {
             $.ajax({
-                url: '../vot',
+                url: '/vot',
                 method: 'post',
                 data: {
                     '_token': token,

@@ -82,9 +82,14 @@ class ComentariController extends Controller
      * @param  \App\Models\Comentari  $comentari
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Comentari $comentari)
+    public function update(Request $request)
     {
-        //
+        $id = $request->route('id');
+        $comentari = Comentari::find($id);
+        $comentari->contingut = $request['contingut'];
+        $comentari->save();
+
+        return true;
     }
 
     /**

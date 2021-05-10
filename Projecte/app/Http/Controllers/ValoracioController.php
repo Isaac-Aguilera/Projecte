@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Valoracio;
+use App\Models\Notificacio;
+use App\Models\Video;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -58,6 +60,9 @@ class ValoracioController extends Controller
 
         $mitjanes = array();
         $valoracions = Valoracio::all()->where('video_id', '=', $video_id)->groupBy('name');
+        $video = Video::find($video_id);
+        $user_vid_id = $video->user->id;
+        $array_cont = array(2,3,415,50,100,250,500,1000,5000,10000);
         foreach($valoracions as $nom => $name) {
             $contador = 0;
             $suma = 0;
@@ -66,6 +71,17 @@ class ValoracioController extends Controller
                 $suma = $suma + $valoracio['valoracio'];
             }
             $mitjanes[$nom] = $suma / $contador;
+            if(in_array($contador,$array_cont)) {
+                if ($mitjanes[$nom] <= 2) {
+                    $desc = "The video ".$video->title." has bad valorations on ".$nom." quality";
+                    if($video->notificacions->where('state', "=", "1")->where('type', "=", $nom)->first()) {
+
+                    }else {
+                        $notificacio = new Notificacio($user_vid_id,$video_id,$desc,true,$nom);
+                        $notificacio->save();
+                    }
+                }
+            }
         }
         return array( 
             'mitjanes' => $mitjanes

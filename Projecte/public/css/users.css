@@ -1,10 +1,6 @@
-/* .banner {
-    height: 220px;
-}
- */
+.centered-and-cropped { object-fit: cover }
 
 
-   
   .box {
     background: #ffffff;
     width: 100%;

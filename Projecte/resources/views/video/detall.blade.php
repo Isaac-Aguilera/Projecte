@@ -1,12 +1,7 @@
 @extends('layouts.app')
-<style>
-	.checked {
-		color: orange;
-	}
-    .perma {
-		color: orange;
-	}
-</style>
+@stack('styles')
+<link href="{{ asset('css/detallVideo.css') }}" rel="stylesheet">
+
 @section('content')
 <script src="{{ asset('js/detall.js') }}"></script>
 <div class="container">
@@ -21,15 +16,19 @@
                 </div>   
             @else
                 <div class="card shadow">
-                    <video class="w-100" poster="../{{ $video->image }}" controls>
+                  <div class="poster">
+                    <video class="video" poster="../{{ $video->image }}" controls>
                         <source src="../{{ $video->video_path }}">
                     </video>
+                  </div>
+                      
+                        
                     <div class="card-body">  
                         
                         <h4 class="card-title font-weight-bolder">{{ $video->title }}</h4>
                         <div class="row">
                             <div class="col-10">
-                                <p class="card-text">{{ $video->views }} views · Release date: {{ Str::limit($video->created_at, 10, '') }}</p>
+                                <p class="card-text text-muted">{{ $video->views }} views · Release date: {{ Str::limit($video->created_at, 10, '') }}</p>
                                 <a href="{{ route('user', $video->user->nick) }}">
                                     <img class="mr-1"
                                         style="border-radius:50%;width:2.5vw;min-width:40px;min-height:40px;"
@@ -82,18 +81,17 @@
                             @endphp 
                             </div>
                         </div>
-                    </div>
-                        <hr>
-                    <div class="card-body">
-                        <h3>Comentaris</h3>
-                        <br>
-                        <div id="comentaris">
+                    
+                        <h3>{{ $video->comentaris->count() }} comments</h3>
+                        <textarea placeholder="Write a comment!" name="contingut" id="contingut" class="form-control" rows="5"></textarea>
+                    <button onclick="afegirComentari({{ $video->id }}, '{{ csrf_token() }}')" class="btn btn-large btn-block btn-primary mt-3" type="submit">Enviar</button>
+                        <div id="comentaris" class="mt-3">
                             @if ($video->comentaris->count() == 0)
                                 <h5>No hi han comentaris!</h5>
                                 <hr>
                             @else
                                 @foreach ($video->comentaris as $comentari)
-                                    <div id={{ $comentari->id }}>
+                                    <div class="mt-3" id={{ $comentari->id }}>
                                         <a href="{{ route('user', $comentari->user->nick) }}">
                                             <img class="mr-1"
                                                 style="border-radius:50%;width:2.5vw;min-width:40px;min-height:40px;"
@@ -103,29 +101,27 @@
                                         
                                         @if(Auth::user() !== null) 
                                             @if($comentari->user_id === Auth::user()->id || $comentari->video->user->id === Auth::user()->id)
-                                            <div class="dropdown">
-                                                <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                    <i class="bi bi-three-dots-vertical"></i>
-                                                </b utton>
-                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                    <button onclick="editarComentari({{ $comentari->id }}, '{{ csrf_token() }}')" class="dropdown-item" >Editar</button>
-                                                    <button onclick="eliminarComentari({{ $comentari->id }}, '{{ csrf_token() }}')" class="dropdown-item" >Eliminar</button>
+                                                <div class="dropdown float-right">
+                                                    <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        <i class="bi bi-three-dots-vertical"></i>
+                                                    </button>
+                                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                        <button onclick="editarComentari({{ $comentari->id }}, '{{ $comentari->contingut }}', '{{ csrf_token() }}')" class="dropdown-item" >Editar</button>
+                                                        <button onclick="eliminarComentari({{ $comentari->id }}, '{{ csrf_token() }}')" class="dropdown-item" >Eliminar</button>
+                                                    </div>
                                                 </div>
-                                              </div>
                                             @endif
                                         @endif
-
-                                        <p class="mt-2 ml-5">{{ $comentari->contingut }}</p>
-
-                                        <hr>
+                                        
+                                        <div id='{{ $comentari->id }}_contingut'>
+                                            <p class="ml-5">{{ $comentari->contingut }}</p>
+                                        </div>
                                     </div>
                                 @endforeach
                             @endif
                         </div>
-                            <textarea placeholder="Write a comment!" name="contingut" id="contingut" class="form-control" rows="5"></textarea>
-                            <button onclick="afegirComentari({{ $video->id }}, '{{ csrf_token() }}')" class="btn btn-large btn-block btn-primary mt-3" type="submit">Enviar</button>
-                            
-                        </div>
+                    </div>
+
                 </div>
             @endif
         </div>
@@ -133,7 +129,7 @@
             <div class="card shadow">
                 <div class="card-body">
                     <h4 class="card-title font-weight-bolder text-center">Video quality</h4>
-                    <h5 id=video>{{ isset($mitjanes['video']) ? $mitjanes['video'] : '' }}</h5>
+                    <p class="text-muted" id=video>The average rating is: <strong>{{ isset($mitjanes['video']) ? $mitjanes['video'] : '' }}</strong><span style="color: orange;" class="ml-1 fa fa-star pl-0 d-inline"></span></p>
                     @for ($i = 1; $i < 6; $i++)
                         <button class="fa fa-star pl-0" onmouseover="cmbst('video',{{ $i }})"
                         onmouseout="cmbst2('video',{{ $i }})" id={{ 'video'.$i }} value={{ $i }}
@@ -155,7 +151,7 @@
             <div class="card shadow mt-2">
                 <div class="card-body">
                     <h4 class="card-title font-weight-bolder text-center">Audio quality</h4>
-                    <h5 id=audio>{{ isset($mitjanes['audio']) ? $mitjanes['audio'] : '' }}</h5>
+                    <p class="text-muted" id=audio>The average rating is: <strong>{{ isset($mitjanes['audio']) ? $mitjanes['audio'] : '' }}</strong><span style="color: orange;" class="ml-1 fa fa-star pl-0 d-inline"></span></p>
                     @for ($i = 1; $i < 6; $i++)
                         <button class="fa fa-star pl-0" onmouseover="cmbst('audio',{{ $i }})"
                         onmouseout="cmbst2('audio',{{ $i }})" id={{ 'audio'.$i }} value={{ $i }}
@@ -178,7 +174,7 @@
             <div class="card shadow mt-2">
                 <div class="card-body">
                     <h4 class="card-title font-weight-bolder text-center">Content quality</h4>
-                    <h5 id=content>{{ isset($mitjanes['content']) ? $mitjanes['content'] : '' }} </h5><span style="color: orange;" class="fa fa-star pl-0 d-inline"></span>
+                    <p class="text-muted" id=content>The average rating is: <strong>{{ isset($mitjanes['content']) ? $mitjanes['content'] : '' }}</strong><span style="color: orange;" class="ml-1 fa fa-star pl-0 d-inline"></span></p>
                     @for ($i = 1; $i < 6; $i++)
                         <button class="fa fa-star pl-0" onmouseover="cmbst('content',{{ $i }})"
                         onmouseout="cmbst2('content',{{ $i }})" id={{ 'content'.$i }} value={{ $i }}

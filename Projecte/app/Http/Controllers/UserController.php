@@ -191,9 +191,20 @@ class UserController extends Controller
     }
 
     public function canviarbanner(Request $request) {
-        $f = $request->file("file");
-        var_dump($f);
-        die();
+        $f = $request->file('img_logo');
+        
+        if ($f == null) {
+            $nick = Auth::user()->nick;
+            $posts = Video::query()->select('views')->where("user_id", "=", Auth::user()->id)->get();
+            return redirect('/user/'.$nick.'/info')->with(['user' => Auth::user(),'views' => $posts,'incorrecte' => "You have to upload a file"]);
+        }
+        $p = $f->store('banner');
+        Auth::user()->banner = $p;
+        Auth::user()->save();
+
+        $posts = Video::query()->select('views')->where("user_id", "=", Auth::user()->id)->get();
+        $nick = Auth::user()->nick;
+        return redirect('/user/'.$nick.'/info')->with(['user' => Auth::user(),'views' => $posts,'correcte' => "Done Correctly"]);
     }
     /**
      * Remove the specified resource from storage.

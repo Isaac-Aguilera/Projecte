@@ -22,12 +22,13 @@
             <div id="colDesc" class="col-8">
                 <p class="font-weight-bold">Description</p>
                 <hr>
+                @if($user->id == Auth::user()->id)
                 <button id="desc" class="btn btn-light" style="border-radius: 0;" onclick="editDesc()"><i class="bi bi-pencil-fill" style="font-size: 1.5rem;"></i></button>
-
+                @endif
                 <span id="descSpan" class="ml-2">{{ $user->channel_desc }}</span>
 
             </div>
-            <div class="col-4 ">
+            <div class="col-4 mb-3">
                 <p class="font-weight-bold">Stats</p>
                 <hr>
                 <span>Joined {{ Str::limit($user->created_at, 10, '') }}</span>
