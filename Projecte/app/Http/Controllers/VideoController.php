@@ -27,7 +27,7 @@ class VideoController extends Controller
             $video->increment('views',1);
             return view('video.detall')->with(['video' => $video,'valoracions' => Valoracio::all()->where('video_id', '=', $video->id)->groupBy('name')]);
         } else {
-            return view('video.detall')->with(['error' => "No s'ha pogut trobar el video!"]);
+            return view('video.detall')->with(['error' => "Video not found!"]);
         }
         
     }
@@ -78,7 +78,7 @@ class VideoController extends Controller
         }
         
         
-        return redirect()->route('pujarVideo')->with(['message' => 'Video penjat correctament']);
+        return redirect()->route('pujarVideo')->with(['message' => 'Video upload correctly']);
 
 
     }

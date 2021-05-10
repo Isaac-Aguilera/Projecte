@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Notificacio;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Auth;
 class NotificacioController extends Controller
 {
     /**
@@ -15,6 +15,14 @@ class NotificacioController extends Controller
     public function index()
     {
         //
+    }
+
+    public function netejarnoti() {
+        $notificacions = Notificacio::all()->where('user_id', "=", Auth::user()->id);
+        foreach($notificacions as $noti) {
+            $noti->state = false;
+            $noti->save();
+        }
     }
 
     /**

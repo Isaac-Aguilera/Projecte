@@ -48,7 +48,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="description" class="col-md-4 col-form-label text-md-right">{{ __('Descripcio') }}</label>
+                            <label for="description" class="col-md-4 col-form-label text-md-right">{{ __('Description') }}</label>
 
                             <div class="col-md-6">
                                 <textarea id="description" class="form-control @error('description') is-invalid @enderror" name="description" autocomplete="description" autofocus></textarea>
@@ -74,7 +74,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="image" class="col-md-4 col-form-label text-md-right">{{ __('Miniatura') }}</label>
+                            <label for="image" class="col-md-4 col-form-label text-md-right">{{ __('Thumbnail') }}</label>
                             <div class="col-md-6">
                                 <input style="max-width: 120%;" id="image" class="@error('image') is-invalid @enderror" type="file" name="image">
                                 @error('image')
@@ -85,10 +85,10 @@
                             </div>
                         </div>            
                         <div class="form-group row">
-                            <label for="categoria" class="col-md-4 col-form-label text-md-right">{{ __('Categoria') }}</label>
+                            <label for="categoria" class="col-md-4 col-form-label text-md-right">{{ __('Category') }}</label>
                             <div class="col-md-6">
                                 <select id="categoria_id" name="categoria_id" class="custom-select @error('categoria_id') is-invalid @enderror" aria-label="Default select example">
-                                    <option value="No puede ser!" selected>Selecciona una categoria</option>
+                                    <option value="No puede ser!" selected>Select a category!</option>
                                     @foreach($categories as $categoria)
                                         <option value="{{ $categoria->id }}">{{ $categoria->name }}</option>
                                     @endforeach
@@ -104,7 +104,7 @@
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-4">
                                 <button type="submit" class="btn btn-primary">
-                                    {{ __('Pujar Vídeo') }}
+                                    {{ __('Upload video') }}
                                 </button>
                             </div>
                         </div>

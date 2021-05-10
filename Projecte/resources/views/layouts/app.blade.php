@@ -38,29 +38,61 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mx-auto">
                         <form class="d-flex" method="GET" action="{{ route('search') }}">
-                            <input class="form-control me-2 col-12 w-100 mt-3" type="search" placeholder="Search" aria-label="Search" id="search" name="search">
+                            <input class="form-control me-2 col-10 w-100 mt-3" type="search" placeholder="Search" aria-label="Search" id="search" name="search">
                             <button class="btn btn-outline-success ml-2 mt-3" type="submit">Search</button>
                           </form>
                     </ul>
 
                     <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav">
+                    
                         <!-- Authentication Links -->
-                        @guest
-                            @if (Route::has('login'))
-                                <li class="nav-item">
-                                    <a class="nav-link active" href="{{ route('login') }}">{{ __('Login') }}</a>
+                    @guest
+                        @if (Route::has('login'))
+                        <ul class="navbar-nav">
+                            <li class="nav-item">
+                                <a class="nav-link active" href="{{ route('login') }}">{{ __('Login') }}</a>
+                            </li>
+                        @endif
+                        
+                        @if (Route::has('register'))
+                            <li class="nav-item">
+                                <a class="nav-link active" href="{{ route('register') }}">{{ __('Register') }}</a>
+                            </li>
+                        @endif
+                    @else
+
+                        <div class="dropdown" style="float: right; padding: 13px">
+                            <a href="#" onclick="netejarnoti()" role="button" data-toggle="dropdown" id="dropdownMenu1" data-target="#" style="float: left" aria-expanded="true">
+                                <i class="fa fa-bell" style="font-size: 20px; float: left; color: white">
+                                </i>
+                            </a>
+                            <span id="notinumber" class="badge badge-danger">{{ Auth::user()->notificacions->where("state", "=", true)->count() }}</span>
+                            <ul class="dropdown-menu dropdown-menu-left pull-right" role="menu" aria-labelledby="dropdownMenu1">
+                                <li role="presentation" class="mx-auto">
+                                    <span class="font-weight-bold ml-3">Notifications</span>
                                 </li>
-                            @endif
-                            
-                            @if (Route::has('register'))
-                                <li class="nav-item">
-                                    <a class="nav-link active" href="{{ route('register') }}">{{ __('Register') }}</a>
+                                <ul class="list-group list-group-flush p-0" style="width: 220px">
+                                    @if (Auth::user()->notificacions->where("state", "=", true)->count() < 1)
+                                        <p class="ml-3">There are no notifications!</p>
+                                    @else
+                                        @foreach(Auth::user()->notificacions->where("state", "=", true) as $notifi)
+                                            <li class="list-group-item p-0 ml-3 mt-3">
+                                                <p>
+                                                    {{ $notifi->noti_desc }} 
+                                                    <p class="text-muted">{{ \FormatTime::LongTimeFilter($notifi->created_at) }}</p>
+                                                </p>
+                                            </li>
+                                        @endforeach
+                                    @endif
+                                </ul>
+                                <li role="presentation">
+                                    <a href="#" class="dropdown-menu-header"></a>
                                 </li>
-                            @endif
-                        @else
+                            </ul>
+                        </div>
+
+                        <ul class="navbar-nav">
                             <li class="nav-item dropdown">
-                                
                                 <li class="nav-item my-auto mr-2">
                                     
                                     <a class="nav-link active" href="{{ route('pujarVideo') }}"><svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-camera-video-fill" viewBox="0 0 16 16">
@@ -92,9 +124,9 @@
                                         @csrf
                                     </form>
                                 </div>
-                            </li>
-                        @endguest
-                    </ul>
+                            </li>         
+                        </ul>
+                    @endguest
                 </div>
             </div>
         </nav>
@@ -105,3 +137,24 @@
     </div>
 </body>
 </html>
+
+
+<script type="text/javascript">
+
+    function netejarnoti() {
+        $.ajax({
+            url: '/netejarnoti',
+            method: 'POST',
+            data: {
+                '_token': '{{ csrf_token() }}',
+            },
+            error: function(response){
+                alert(response['statusText']);
+            },
+            success: function(response) {
+                
+                document.getElementById("notinumber").innerHTML = "0";
+            }
+        });
+    }
+</script>

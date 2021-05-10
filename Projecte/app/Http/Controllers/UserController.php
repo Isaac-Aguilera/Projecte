@@ -29,7 +29,7 @@ class UserController extends Controller
             $posts = Video::query()->where("user_id", "=", "{$user->id}")->orderBy('created_at','DESC')->get();
             return view('user.detall')->with(['user' => $user, 'posts' => $posts, 'categorias' => $categorias]);
         } else {
-            return view('user.detall')->with(['error' => "No s'ha pogut trobar l'usuari!"]);
+            return view('user.detall')->with(['error' => "User not found!"]);
         }
     }
 
@@ -40,7 +40,7 @@ class UserController extends Controller
             $posts = Video::query()->where("user_id", "=", "{$user->id}")->orderBy('created_at','DESC')->get();
             return view('user.videos')->with(['user' => $user, 'posts' => $posts]);
         } else {
-            return view('user.videos')->with(['error' => "No s'ha pogut trobar l'usuari!"]);
+            return view('user.videos')->with(['error' => "User not found!"]);
         }
     }
 
@@ -52,7 +52,7 @@ class UserController extends Controller
             $posts = Video::query()->select('views')->where("user_id", "=", "{$user->id}")->get();
             return view('user.info')->with(['user' => $user,'views' => $posts]);
         } else {
-            return view('user.info')->with(['error' => "No s'ha pogut trobar l'usuari!"]);
+            return view('user.info')->with(['error' => "User not found!"]);
         }
     }
 
@@ -81,6 +81,17 @@ class UserController extends Controller
 
 
         return view('user.search')->with(['posts' => $posts, 'user' => $user]);
+    }
+
+    public function uservidmanager(Request $request,$nick)
+    {
+        $user = User::where('nick',$nick)->first();
+        if (isset($user)) {
+            $posts = Video::query()->where("user_id", "=", "{$user->id}")->orderBy('created_at','DESC')->get();
+            return view('user.manage')->with(['user' => $user, 'posts' => $posts]);
+        } else {
+            return view('user.videos')->with(['error' => "User not found!"]);
+        }
     }
 
     /**
@@ -157,7 +168,7 @@ class UserController extends Controller
         }
         $user->save();
 
-        return redirect()->route('config')->with(['message' => 'Usuari actualitzat correctament!']);
+        return redirect()->route('config')->with(['message' => 'User updated!']);
     }
 
     public function password()
@@ -181,7 +192,7 @@ class UserController extends Controller
         $user->fill($data);
         $user->save();
 
-        return redirect()->route('configPassword')->with(['message' => 'Contrasenya actualitzada correctament!']);
+        return redirect()->route('configPassword')->with(['message' => 'Password updated!']);
     }
 
 
@@ -212,8 +223,10 @@ class UserController extends Controller
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function destroy(User $user)
-    {
-        //
-    }
+     public function destroy(Request $request)
+     {
+         $id = $request->route('id');
+         $video = Video::find($id);
+         $video->delete();
+     }
 }

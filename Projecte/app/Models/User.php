@@ -90,4 +90,12 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Models\Vot', 'user_id');
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function notificacions()
+    {
+        return $this->hasMany('App\Models\Notificacio', 'user_id');
+    }
 }

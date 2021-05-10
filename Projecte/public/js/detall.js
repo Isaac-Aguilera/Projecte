@@ -1,5 +1,7 @@
 function editarComentari(id, contingut, token) {
-    document.getElementById((id+'_contingut').toString()).innerHTML = '<textarea name="contingut" id="'+id+'_area" class="form-control" rows="5">'+contingut+'</textarea><button onclick="confirmarEditarComentari('+id+', \''+token+'\')" class="btn btn-large btn-block btn-primary mt-3">Confirmar</button>';
+    document.getElementById((id+'_contingut').toString()).innerHTML = 
+    '<textarea name="contingut" id="'+id+'_area" class="form-control mt-3" rows="5">'+contingut+'</textarea>'+
+    '<button onclick="confirmarEditarComentari('+id+', \''+token+'\')" class="btn btn-large btn-block btn-primary mt-3">Confirm</button>';
 }
 function confirmarEditarComentari(id, token) {
     contingut = document.getElementById((id+'_area').toString()).value;
@@ -14,7 +16,9 @@ function confirmarEditarComentari(id, token) {
             alert(response['statusText']);
         },
         success: function(response) {
-            document.getElementById((id+'_contingut').toString()).innerHTML = '<p>'+contingut+'</p>';
+            document.getElementById((id+'_contingut').toString()).innerHTML = '<div id=\''+response['id']+'_contingut\'>'+
+                '<p class="mt-2 ml-5">'+contingut+'</p>'+
+            '</div>';
         }
     });
 }
@@ -30,7 +34,7 @@ function eliminarComentari(id, token) {
         },
         success: function(response) {
             if(!response['comentaris']) {
-                document.getElementById('comentaris').innerHTML += '<h5>No hi han comentaris!</h5><hr>';
+                document.getElementById('comentaris').innerHTML += '<h5>There are no comments!</h5>';
             }
             document.getElementById(id).remove();
         }
@@ -38,6 +42,7 @@ function eliminarComentari(id, token) {
 }
 function afegirComentari(video_id, token) {
     contingut = document.getElementById('contingut').value;
+    document.getElementById('contingut').value = "";
     $.ajax({
         url: '/comentari',
         method: 'post',
@@ -53,7 +58,22 @@ function afegirComentari(video_id, token) {
         success: function(response) {
             afegir = '<div id='+response['id']+'>'+
                 '<a href="/user/'+response['nick']+'">'+
-                    '<img class="mr-1"style="border-radius:50%;width:2.5vw;min-width:40px;min-height:40px;"src="/'+response['image']+'"></a><span>'+response['nick']+'</span><div class="dropdown"><button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="bi bi-three-dots-vertical"></i></button><div class="dropdown-menu" aria-labelledby="dropdownMenuButton"><button onclick="editarComentari('+response['id']+', \''+contingut+'\', \''+token+'\')" class="dropdown-item" >Editar</button><button onclick="eliminarComentari('+response['id']+', \''+token+'\')" class="dropdown-item" >Eliminar</button></div></div><div id=\''+response['id']+'_contingut\'><p class="mt-2 ml-5">'+contingut+'</p></div><hr></div>'
+                    '<img class="mr-1"style="border-radius:50%;width:2.5vw;min-width:40px;min-height:40px;"src="/'+response['image']+'">'+
+                    '</a>'+
+                '<span>'+response['nick']+'</span>'+
+                '<div class="dropdown float-right">'+
+                    '<button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'+
+                        '<i class="bi bi-three-dots-vertical"></i>'+
+                    '</button>'+
+                    '<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">'+
+                        '<button onclick="editarComentari('+response['id']+', \''+contingut+'\', \''+token+'\')" class="dropdown-item" >Edit</button>'+
+                        '<button onclick="eliminarComentari('+response['id']+', \''+token+'\')" class="dropdown-item" >Delete</button>'+
+                    '</div>'+
+                '</div>'+
+                '<div id=\''+response['id']+'_contingut\'>'+
+                    '<p class="mt-2 ml-5">'+contingut+'</p>'+
+                '</div>'+
+            '</div>'
             if(response['comentaris']==1) {
                 document.getElementById('comentaris').innerHTML = afegir;
             } else {
@@ -164,7 +184,10 @@ function valorar(name, id, video_id, token) {
             },
             success: function(response){
                 Object.entries(response['mitjanes']).forEach(([key, value])=> {
-                    document.getElementById(key).innerHTML = value;
+                    document.getElementById(key).innerHTML = '<p class="text-muted" id="'+key+'">'+
+                        'The average rating is: <strong>'+value+'</strong>'+
+                        '<span style="color: orange;" class="ml-1 fa fa-star pl-0 d-inline"></span>'+
+                    '</p>';
                 });
                 document.getElementById(name+(1).toString()).classList.remove('perma');
                 document.getElementById(name+(2).toString()).classList.remove('perma');
@@ -192,7 +215,10 @@ function valorar(name, id, video_id, token) {
             },
             success: function(response){
                 Object.entries(response['mitjanes']).forEach(([key, value])=> {
-                    document.getElementById(key).innerHTML = value;
+                    document.getElementById(key).innerHTML = '<p class="text-muted" id="'+key+'">'+
+                        'The average rating is: <strong>'+value+'</strong>'+
+                        '<span style="color: orange;" class="ml-1 fa fa-star pl-0 d-inline"></span>'+
+                    '</p>';
                 });
                 perma(name,id);
             }

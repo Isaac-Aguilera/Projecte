@@ -6,6 +6,7 @@ use App\Http\Controllers\VideoController;
 use App\Http\Controllers\VotController;
 use App\Http\Controllers\ValoracioController;
 use App\Http\Controllers\ComentariController;
+use App\Http\Controllers\NotificacioController;
 
 /*
 |--------------------------------------------------------------------------
@@ -46,6 +47,10 @@ Route::get('/user/{nick}/info', [UserController::class, 'userinfo'])->name('user
 
 Route::get('/user/{nick}/search', [UserController::class, 'usersearch'])->name('usersearch');
 
+Route::get('/user/{nick}/managevideos', [UserController::class, 'uservidmanager'])->name('uservidmanager');
+
+Route::delete('/deletevid/{id}', [UserController::class, 'destroy'])->name('deletevid');
+
 Route::post('/valoracio', [ValoracioController::class, 'store'])->name('valoracio');
 Route::delete('/valoracio', [ValoracioController::class, 'destroy'])->name('valoracio');
 
@@ -56,3 +61,8 @@ Route::delete('/comentari/{id}', [ComentariController::class, 'destroy'])->name(
 Route::post('/canviardesc', [UserController::class, 'canviardesc'])->name('canviardesc');
 
 Route::post('/canviarbanner', [UserController::class, 'canviarbanner'])->name('canviarbanner');
+
+Route::post('/netejarnoti', [NotificacioController::class, 'netejarnoti'])->name('netejarnoti');
+
+
+

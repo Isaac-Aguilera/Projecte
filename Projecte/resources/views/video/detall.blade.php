@@ -87,8 +87,7 @@
                     <button onclick="afegirComentari({{ $video->id }}, '{{ csrf_token() }}')" class="btn btn-large btn-block btn-primary mt-3" type="submit">Enviar</button>
                         <div id="comentaris" class="mt-3">
                             @if ($video->comentaris->count() == 0)
-                                <h5>No hi han comentaris!</h5>
-                                <hr>
+                                <h5>There are no comments!</h5>
                             @else
                                 @foreach ($video->comentaris as $comentari)
                                     <div class="mt-3" id={{ $comentari->id }}>
@@ -106,8 +105,8 @@
                                                         <i class="bi bi-three-dots-vertical"></i>
                                                     </button>
                                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                        <button onclick="editarComentari({{ $comentari->id }}, '{{ $comentari->contingut }}', '{{ csrf_token() }}')" class="dropdown-item" >Editar</button>
-                                                        <button onclick="eliminarComentari({{ $comentari->id }}, '{{ csrf_token() }}')" class="dropdown-item" >Eliminar</button>
+                                                        <button onclick="editarComentari({{ $comentari->id }}, '{{ $comentari->contingut }}', '{{ csrf_token() }}')" class="dropdown-item" >Edit</button>
+                                                        <button onclick="eliminarComentari({{ $comentari->id }}, '{{ csrf_token() }}')" class="dropdown-item" >Delete</button>
                                                     </div>
                                                 </div>
                                             @endif
