@@ -38,9 +38,9 @@ class Video extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function category()
+    public function categoria()
     {
-        return $this->belongsTo('App\Models\Category', 'categoria_id');
+        return $this->belongsTo('App\Models\Categoria', 'categoria_id');
     }
 
     /**

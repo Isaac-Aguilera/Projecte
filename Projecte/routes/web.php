@@ -33,6 +33,8 @@ Route::get('/pujarVideo', [VideoController::class, 'create'])->name('pujarVideo'
 Route::post('/pujarVideo', [VideoController::class, 'store'])->name('pujarVideo');
 
 Route::get('/video/{id}', [VideoController::class, 'index'])->name('video');
+Route::get('/editarVideo/{id}', [VideoController::class, 'edit'])->name('editarVideo');
+Route::post('/editarVideo/{id}', [VideoController::class, 'update'])->name('editarVideo');
 
 Route::get('/user/{nick}', [UserController::class, 'index'])->name('user');
 

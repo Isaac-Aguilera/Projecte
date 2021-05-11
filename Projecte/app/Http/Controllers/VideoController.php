@@ -128,9 +128,11 @@ class VideoController extends Controller
      * @param  \App\Models\Video  $video
      * @return \Illuminate\Http\Response
      */
-    public function edit(Video $video)
+    public function edit(Request $request)
     {
-        //
+        $this->middleware('auth');
+        $video = Video::find($request->route('id'));
+        return view('video.edit')->with('video' , $video)->with('categories', Categoria::orderBy('name')->get());
     }
 
     /**
@@ -140,9 +142,23 @@ class VideoController extends Controller
      * @param  \App\Models\Video  $video
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Video $video)
+    public function update(Request $request)
     {
-        //
+        $this->middleware('auth');
+        $video = Video::find($request->route('id'));
+        $data = $request->all();
+        Validator::make($data, [
+            'title' => ['required','string','min:5','max:255'],
+            'description' => ['required','min:5'],
+            'image' => ['required','image', 'dimensions:min_width=200,min_height=200'],
+            'categoria_id' => ['required','integer'],
+        ])->validate();
+        if($video->image != $data['image']) {
+            $i = $data['image']->store('miniaturas');
+            $data['image'] = $i;
+        }
+        $video->update($data);
+        return redirect()->route('editarVideo', $video->id)->with(['message' => 'Video edited correctly']);
     }
 
     /**
