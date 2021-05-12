@@ -150,15 +150,16 @@ class VideoController extends Controller
         Validator::make($data, [
             'title' => ['required','string','min:5','max:255'],
             'description' => ['required','min:5'],
-            'image' => ['required','image', 'dimensions:min_width=200,min_height=200'],
+            'image' => ['image', 'dimensions:min_width=200,min_height=200'],
             'categoria_id' => ['required','integer'],
         ])->validate();
-        if($video->image != $data['image']) {
+        if(isset($data['image'])) {
             $i = $data['image']->store('miniaturas');
+            Storage::disk('miniaturas')->delete($video->image);
             $data['image'] = $i;
         }
         $video->update($data);
-        return redirect()->route('editarVideo', $video->id)->with(['message' => 'Video edited correctly']);
+        return redirect()->route('editarVideo', $video->id)->with(['message' => 'Video edited correctly!']);
     }
 
     /**
@@ -167,9 +168,14 @@ class VideoController extends Controller
      * @param  \App\Models\Video  $video
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Video $video)
+    public function destroy(Request $request)
     {
-        Storage::disk('videos')->delete($video->video_path);
-        $video->delete();
+        $id = $request->route('id');
+        $video = Video::find($id);
+        if(Auth::user()->id == $video->user_id) {
+            Storage::disk('videos')->delete($video->video_path);
+            Storage::disk('miniaturas')->delete($video->image);
+            $video->delete();
+        }
     }
 }

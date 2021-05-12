@@ -62,7 +62,8 @@
                         <div class="form-group row">
                             <label for="image" class="col-md-4 col-form-label text-md-right">{{ __('Thumbnail') }}</label>
                             <div class="col-md-6">
-                                <input style="max-width: 120%;" value="{{ $video->image }}" id="image" class="@error('image') is-invalid @enderror" type="file" name="image">
+                                <img class="img-fluid mb-4"  src="/{{ $video->image }}" alt="">
+                                <input style="max-width: 120%;" id="image" class="@error('image') is-invalid @enderror" type="file" name="image">
                                 @error('image')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -74,7 +75,7 @@
                             <label for="categoria" class="col-md-4 col-form-label text-md-right">{{ __('Category') }}</label>
                             <div class="col-md-6">
                                 <select id="categoria_id" name="categoria_id" class="custom-select @error('categoria_id') is-invalid @enderror" aria-label="Default select example">
-                                    <option value="{{ $video->categoria->name }}" selected>Select a category!</option>
+                                    <option value="{{ $video->categoria->id }}" selected>{{ $video->categoria->name }}</option>
                                     @foreach($categories as $categoria)
                                         <option value="{{ $categoria->id }}">{{ $categoria->name }}</option>
                                     @endforeach
@@ -90,7 +91,7 @@
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-4">
                                 <button type="submit" class="btn btn-primary">
-                                    {{ __('Upload video') }}
+                                    {{ __('Confirm changes') }}
                                 </button>
                             </div>
                         </div>

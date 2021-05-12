@@ -51,7 +51,7 @@ Route::get('/user/{nick}/search', [UserController::class, 'usersearch'])->name('
 
 Route::get('/user/{nick}/managevideos', [UserController::class, 'uservidmanager'])->name('uservidmanager');
 
-Route::delete('/deletevid/{id}', [UserController::class, 'destroy'])->name('deletevid');
+Route::delete('/deletevid/{id}', [VideoController::class, 'destroy'])->name('deletevid');
 
 Route::post('/valoracio', [ValoracioController::class, 'store'])->name('valoracio');
 Route::delete('/valoracio', [ValoracioController::class, 'destroy'])->name('valoracio');

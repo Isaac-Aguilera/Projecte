@@ -234,6 +234,7 @@ return [
 
         'User' => App\Models\User::class,
         'Video' => App\Models\Video::class,
+        'Categoria' => App\Models\Categoria::class,
         'Vot' => App\Models\Vot::class,
         'FormatTime' => App\Helpers\FormatTime::class,
 

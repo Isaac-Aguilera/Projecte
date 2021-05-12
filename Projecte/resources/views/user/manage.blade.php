@@ -9,17 +9,33 @@
 
         <div class="row bg-light mt-3">
             <div class="col w-100">                    
-                <table class="table">
+                <table class="table table-responsive-md">
                     <thead class="thead-dark">
                       <tr>
                         <th scope="col">Video</th>
                         <th scope="col">Date</th>
+                        <th scope="col">Video</th>
+                        <th scope="col">Audio</th>
+                        <th scope="col">Content</th>
                         <th scope="col">Views</th>
                         <th scope="col">Comments</th>
                       </tr>
                     </thead>
                     <tbody>
                     @foreach ($posts as $video)
+                        @php
+                            $mitjanes = array();
+                            $valoracions = $video->valoracions->groupBy('name');
+                            foreach($valoracions as $nom => $name) {
+                                $contador = 0;
+                                $suma = 0;
+                                foreach($name as $id => $valoracio) {
+                                    $contador = $contador + 1;
+                                    $suma = $suma + $valoracio['valoracio'];
+                                }
+                                $mitjanes[$nom] = round($suma / $contador,2);
+                            }
+                        @endphp
                       <tr id="{{  $video->id  }}">
                         <td>
                             <div class="dropdown">
@@ -33,11 +49,14 @@
                             </div>
                             <img height=100 width=180 src="/{{ $video->image }}" alt="">
                             <div style="display:inline-block; vertical-align:top;" class="ml-3">
-                                <span title="{{ $video->title }}">{{ Str::limit($video->title,29,"...") }}</span>
+                                <span title="{{ $video->title }}"><a class="text-decoration-none text-dark" href='/video/{{ $video->id }}'>{{ Str::limit($video->title,29,"...") }}</a></span>
                                 <p class="text-muted" title="{{ $video->description }}">{{ Str::limit($video->description,29,"...") }}</p>
                             </div>
                         </td>
                         <td>{{ Str::limit($video->created_at, 10, '') }}</td>
+                        <td>{{ isset($mitjanes['video']) ? $mitjanes['video'] : '-' }}</td>
+                        <td>{{ isset($mitjanes['audio']) ? $mitjanes['audio'] : '-' }}</td>
+                        <td>{{ isset($mitjanes['content']) ? $mitjanes['content'] : '-' }}</td>
                         <td>{{ $video->views }}</td>
                         <td>
                             {{ $video->comentaris->count() }}

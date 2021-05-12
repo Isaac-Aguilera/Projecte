@@ -8,7 +8,19 @@
  
 <main class="main" role="main">
     <div class="album py-5 bg-light">
+        
         <div class="container">
+            <div class="dropdown text-right">
+                <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Categories
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <button onclick="cambiarVista(0)" class="dropdown-item" >All</button>
+                    @foreach(App\Models\Categoria::all() as $categoria)
+                        <button onclick="cambiarVista({{ $categoria->id }})" class="dropdown-item" >{{ $categoria->name }}</button>
+                    @endforeach
+                </div>
+            </div>
             <div class="row">
                 @foreach(Video::orderBy('created_at','DESC')->get() as $video)
                 <div class="col-lg-4 col-md-6 col-sm-6">

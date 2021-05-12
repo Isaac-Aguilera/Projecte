@@ -44,26 +44,26 @@
                                 @endphp 
                                 @if(isset($vot))
                                     @if($vot->votacio == 1)
-                                        <i id="like_{{ $video->id }}" class="bi bi-hand-thumbs-up-fill" onclick="like({{ $video->id }}, 'like', '{{ csrf_token() }}')"></i>
+                                        <button class="btn p-0"><i id="like_{{ $video->id }}" class="bi bi-hand-thumbs-up-fill" onclick="like({{ $video->id }}, 'like', '{{ csrf_token() }}')"></i></button>
                                         <span id="like_{{ $video->id }}_count">{{ $video->vots->where('votacio', '=', true)->count() }}</span>
-                                        <i id="dislike_{{ $video->id }}" class="bi bi-hand-thumbs-down" onclick="like({{ $video->id }}, 'dislike', '{{ csrf_token() }}')"></i>
+                                        <button class="btn p-0"><i id="dislike_{{ $video->id }}" class="bi bi-hand-thumbs-down" onclick="like({{ $video->id }}, 'dislike', '{{ csrf_token() }}')"></i></button>
                                         <span id="dislike_{{ $video->id }}_count">{{ $video->vots->where('votacio', '=', false)->count() }}</span>
                                     @else
-                                        <i id="like_{{ $video->id }}" class="bi bi-hand-thumbs-up"  onclick="like({{ $video->id }}, 'like', '{{ csrf_token() }}')"></i>
+                                        <button class="btn p-0"><i id="like_{{ $video->id }}" class="bi bi-hand-thumbs-up"  onclick="like({{ $video->id }}, 'like', '{{ csrf_token() }}')"></i></button>
                                         <span id="like_{{ $video->id }}_count">{{ $video->vots->where('votacio', '=', true)->count() }}</span>
-                                        <i id="dislike_{{ $video->id }}" class="bi bi-hand-thumbs-down-fill" onclick="like({{ $video->id }}, 'dislike', '{{ csrf_token() }}')"></i>
+                                        <button class="btn p-0"><i id="dislike_{{ $video->id }}" class="bi bi-hand-thumbs-down-fill" onclick="like({{ $video->id }}, 'dislike', '{{ csrf_token() }}')"></i></button>
                                         <span id="dislike_{{ $video->id }}_count">{{ $video->vots->where('votacio', '=', false)->count() }}</span>
                                     @endif
                                 @else
-                                    <i id="like_{{ $video->id }}" class="bi bi-hand-thumbs-up" onclick="like({{ $video->id }}, 'like', '{{ csrf_token() }}')"></i>
+                                    <button class="btn p-0"><i id="like_{{ $video->id }}" class="bi bi-hand-thumbs-up" onclick="like({{ $video->id }}, 'like', '{{ csrf_token() }}')"></i></button>
                                     <span id="like_{{ $video->id }}_count">{{ $video->vots->where('votacio', '=', true)->count() }}</span>
-                                    <i id="dislike_{{ $video->id }}" class="bi bi-hand-thumbs-down" onclick="like({{ $video->id }}, 'dislike', '{{ csrf_token() }}')"></i>
+                                    <button class="btn p-0"><i id="dislike_{{ $video->id }}" class="bi bi-hand-thumbs-down" onclick="like({{ $video->id }}, 'dislike', '{{ csrf_token() }}')"></i></button>
                                     <span id="dislike_{{ $video->id }}_count">{{ $video->vots->where('votacio', '=', false)->count() }}</span>
                                 @endif
                             @else
-                                <i id="like_{{ $video->id }}" class="bi bi-hand-thumbs-up" onclick="like({{ $video->id }}, 'like', '{{ csrf_token() }}')"></i>
+                                <button class="btn p-0"><i id="like_{{ $video->id }}" class="bi bi-hand-thumbs-up" onclick="like({{ $video->id }}, 'like', '{{ csrf_token() }}')"></i></button>
                                 <span id="like_{{ $video->id }}_count">{{ $video->vots->where('votacio', '=', true)->count() }}</span>
-                                <i id="dislike_{{ $video->id }}" class="bi bi-hand-thumbs-down" onclick="like({{ $video->id }}, 'dislike', '{{ csrf_token() }}')"></i>
+                                <button class="btn p-0"><i id="dislike_{{ $video->id }}" class="bi bi-hand-thumbs-down" onclick="like({{ $video->id }}, 'dislike', '{{ csrf_token() }}')"></i></button>
                                 <span id="dislike_{{ $video->id }}_count">{{ $video->vots->where('votacio', '=', false)->count() }}</span>
                             @endif
     

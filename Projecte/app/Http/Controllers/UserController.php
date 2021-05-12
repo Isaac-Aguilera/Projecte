@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\User;
 use App\Models\Video;
 use App\Models\Categoria;
+use App\Models\Valoracio;
 use Intervention\Image\ImageServiceProvider;
 class UserController extends Controller
 {
@@ -84,8 +85,10 @@ class UserController extends Controller
     }
 
     public function uservidmanager(Request $request,$nick)
-    {
+    {   
+        $this->middleware('auth');
         $user = User::where('nick',$nick)->first();
+
         if (isset($user)) {
             $posts = Video::query()->where("user_id", "=", "{$user->id}")->orderBy('created_at','DESC')->get();
             return view('user.manage')->with(['user' => $user, 'posts' => $posts]);
@@ -210,6 +213,7 @@ class UserController extends Controller
             return redirect('/user/'.$nick.'/info')->with(['user' => Auth::user(),'views' => $posts,'incorrecte' => "You have to upload a file"]);
         }
         $p = $f->store('banner');
+        Storage::disk('banner')->delete(Auth::user()->banner);
         Auth::user()->banner = $p;
         Auth::user()->save();
 
@@ -225,8 +229,6 @@ class UserController extends Controller
      */
      public function destroy(Request $request)
      {
-         $id = $request->route('id');
-         $video = Video::find($id);
-         $video->delete();
+        //
      }
 }
