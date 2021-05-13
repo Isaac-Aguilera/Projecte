@@ -40,7 +40,7 @@
                     <img class="mr-1" style="border-radius:50%;width:5.5vw;min-width:80px;min-height:80px;"
                         src="/{{ $user->image }}">
                 </a> --}}
-                <strong><span class="h1 pl-3 font-weight-bold">{{ $user->nick }}</span></strong>
+                <strong><span class="h1 font-weight-bold">{{ $user->nick }}</span></strong>
 
                   <div class="float-right">
                     <a href="{{ route('pujarVideo') }}"><button class="btn btn-outline-dark">UPLOAD</button></a>
@@ -74,20 +74,27 @@
     <div class="col">
         <nav class="navbar navbar-expand-lg navbar-light bg-white p-0">
             <ul class="navbar-nav mr-auto">
+
+                @if($user->videos->count() >= 1)
                 <li class="nav-item active">
                     <a class="nav-link" href="{{ route('user', [$user->nick]) }}">PROFILE</a>
                 </li>
                 <li class="nav-item active">
                     <a class="nav-link" href="{{ route('uservid', [$user->nick]) }}">VIDEOS</a>
                 </li>
+                @endif
                 <li class="nav-item active">
                     <a class="nav-link" href="{{ route('userinfo', [$user->nick]) }}">MORE INFO</a>
                 </li>
-
+                @if($user->videos->count() >= 1)
                 @if($user->id == Auth::user()->id)
                 <li class="nav-item active">
                   <a class="nav-link" href="{{ route('uservidmanager', [$user->nick]) }}">MANAGE VIDEOS</a>
                 </li>
+                <li class="nav-item active">
+                  <a class="nav-link" href="{{ route('userecommendations', [$user->nick]) }}">RECOMMENDATIONS</a>
+                </li>
+                @endif
                 @endif
             </ul>
             <ul class="navbar-nav">

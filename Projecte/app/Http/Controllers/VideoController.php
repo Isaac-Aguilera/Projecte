@@ -155,7 +155,7 @@ class VideoController extends Controller
         ])->validate();
         if(isset($data['image'])) {
             $i = $data['image']->store('miniaturas');
-            Storage::disk('miniaturas')->delete($video->image);
+            Storage::delete($video->image);
             $data['image'] = $i;
         }
         $video->update($data);
@@ -173,8 +173,8 @@ class VideoController extends Controller
         $id = $request->route('id');
         $video = Video::find($id);
         if(Auth::user()->id == $video->user_id) {
-            Storage::disk('videos')->delete($video->video_path);
-            Storage::disk('miniaturas')->delete($video->image);
+            Storage::delete($video->video_path);
+            Storage::delete($video->image);
             $video->delete();
         }
     }

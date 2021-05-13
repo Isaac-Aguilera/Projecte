@@ -2,7 +2,7 @@
 
 @section('content')
 <main class="main" role="main">
-    <div class="container bg-white shadow rounded">
+    <div class="container bg-white shadow rounded" style="margin-top: 100px;">
         @include('layouts.users')
         @section('user-content')
         @stop
@@ -43,7 +43,7 @@
                                     <i class="bi bi-three-dots-vertical font-weight-bold"></i>
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <a href="/editarVideo/{{ $video->id }}"><button class="dropdown-item" >Edit</button></a>
+                                    <a class="text-decoration-none" href="/editarVideo/{{ $video->id }}"><button class="dropdown-item" >Edit</button></a>
                                     <button onclick="eliminarvideo({{ $video->id }})" class="dropdown-item" >Delete</button>
                                 </div>
                             </div>

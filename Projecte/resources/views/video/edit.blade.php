@@ -8,12 +8,12 @@
 
     
 
-<div class="container">
+<div class="container" style="margin-top: 100px;">
     <div class="row justify-content-center">
         <div class="col-md-8">
             
-            <div class="card">
-                <div class="card-header">{{ __('Edit video') }}</div>
+            <div class="card shadow">
+                <div class="card-header font-weight-bold">{{ __('Edit video') }}</div>
 
                 <div class="card-body">
 
@@ -62,7 +62,7 @@
                         <div class="form-group row">
                             <label for="image" class="col-md-4 col-form-label text-md-right">{{ __('Thumbnail') }}</label>
                             <div class="col-md-6">
-                                <img class="img-fluid mb-4"  src="/{{ $video->image }}" alt="">
+                                <img class="img-fluid mb-3"  src="/{{ $video->image }}" alt="">
                                 <input style="max-width: 120%;" id="image" class="@error('image') is-invalid @enderror" type="file" name="image">
                                 @error('image')
                                     <span class="invalid-feedback" role="alert">

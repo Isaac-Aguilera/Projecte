@@ -7,6 +7,7 @@ use App\Http\Controllers\VotController;
 use App\Http\Controllers\ValoracioController;
 use App\Http\Controllers\ComentariController;
 use App\Http\Controllers\NotificacioController;
+use App\Http\Controllers\CategoriaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,6 +52,8 @@ Route::get('/user/{nick}/search', [UserController::class, 'usersearch'])->name('
 
 Route::get('/user/{nick}/managevideos', [UserController::class, 'uservidmanager'])->name('uservidmanager');
 
+Route::get('/user/{nick}/recommendations', [UserController::class, 'userecommendations'])->name('userecommendations');
+
 Route::delete('/deletevid/{id}', [VideoController::class, 'destroy'])->name('deletevid');
 
 Route::post('/valoracio', [ValoracioController::class, 'store'])->name('valoracio');
@@ -61,6 +64,8 @@ Route::post('/editarComentari/{id}', [ComentariController::class, 'update'])->na
 Route::delete('/comentari/{id}', [ComentariController::class, 'destroy'])->name('eliminarComentari');
 
 Route::post('/canviardesc', [UserController::class, 'canviardesc'])->name('canviardesc');
+
+Route::post('/aaa', [CategoriaController::class, 'index'])->name('aaa');
 
 Route::post('/canviarbanner', [UserController::class, 'canviarbanner'])->name('canviarbanner');
 

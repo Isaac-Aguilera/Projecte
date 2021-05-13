@@ -4,7 +4,7 @@
 <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
 @section('content')
 <main class="main" role="main">
-    <div class="container bg-white shadow rounded">
+    <div class="container bg-white shadow rounded" style="margin-top: 100px;">
       
         @if (isset($error))
         <div class="card">
@@ -66,7 +66,6 @@
 
                             @endforeach
                     </div>
-                    <hr>
                 </div>
 
             </div>

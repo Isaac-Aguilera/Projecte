@@ -1,14 +1,14 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
+<div class="container" style="margin-top: 100px;">
     <div class="row justify-content-center">
         <div class="col-md-8">
             @if (session('message')) 
                 <h4>{{ session()->get('message') }}</h4> 
             @endif 
-            <div class="card">
-                <div class="card-header">{{ __('Cambiar Contrasenya') }}</div>
+            <div class="card shadow">
+                <div class="card-header font-weight-bold">{{ __('Change password') }}</div>
 
                 <div class="card-body">
                     <form method="POST" action="{{ route('configPassword') }}">
@@ -39,7 +39,7 @@
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-4">
                                 <button type="submit" class="btn btn-primary">
-                                    {{ __('Aplicar') }}
+                                    {{ __('Confirm changes') }}
                                 </button>
                             </div>
                         </div>

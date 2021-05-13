@@ -6,7 +6,7 @@
 @section('content')
 <main class="main" role="main">
         <div class="album py-5 bg-light">
-            <div class="container">
+            <div class="container" style="margin-top: 100px;">
                 <div class="row">
                     @if($videosearch->count() < 1)
                         <div class="col-lg-12 col-md-12 col-sm-12">

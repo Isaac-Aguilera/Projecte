@@ -80,7 +80,6 @@ class UserController extends Controller
             ->get();
         }
 
-
         return view('user.search')->with(['posts' => $posts, 'user' => $user]);
     }
 
@@ -95,6 +94,20 @@ class UserController extends Controller
         } else {
             return view('user.videos')->with(['error' => "User not found!"]);
         }
+    }
+
+    public function userecommendations(Request $request, $nick)
+    {
+        $this->middleware('auth');
+        $user = User::where('nick',$nick)->first();
+
+        if (isset($user)) {
+            $posts = Video::query()->where("user_id", "=", "{$user->id}")->orderBy('created_at','DESC')->get();
+            return view('user.recommendations')->with(['user' => $user, 'posts' => $posts]);
+        } else {
+            return view('user.videos')->with(['error' => "User not found!"]);
+        }
+        
     }
 
     /**
@@ -164,7 +177,7 @@ class UserController extends Controller
         $user->fill($data);
         if (isset($data['file'])) {
             $p = $data['file']->store('avatars');
-            Storage::disk('avatars')->delete($user->image);
+            Storage::delete($user->image);
             $user->image = $p;
         } else {
             $user->image = $i;
@@ -213,7 +226,7 @@ class UserController extends Controller
             return redirect('/user/'.$nick.'/info')->with(['user' => Auth::user(),'views' => $posts,'incorrecte' => "You have to upload a file"]);
         }
         $p = $f->store('banner');
-        Storage::disk('banner')->delete(Auth::user()->banner);
+        Storage::delete(Auth::user()->banner);
         Auth::user()->banner = $p;
         Auth::user()->save();
 

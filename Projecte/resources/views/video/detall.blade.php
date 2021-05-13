@@ -4,7 +4,7 @@
 
 @section('content')
 <script src="{{ asset('js/detall.js') }}"></script>
-<div class="container">
+<div class="container" style="margin-top: 100px;">
     <div class="row">
         <div class="col-lg-8 col-xs-12 mb-3">
             @if (isset($error))

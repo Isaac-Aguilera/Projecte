@@ -3,7 +3,7 @@
 <link href="{{ asset('css/home.css') }}" rel="stylesheet">
 @section('content')
 <main class="main" role="main">
-    <div class="container bg-white shadow rounded">
+    <div class="container bg-white shadow rounded" style="margin-top: 100px;">
       
         @if (isset($error))
         <div class="card">

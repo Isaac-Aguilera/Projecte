@@ -8,12 +8,12 @@
 
     
 
-<div class="container">
+<div class="container" style="margin-top: 100px;">
     <div class="row justify-content-center">
         <div class="col-md-8">
             
-            <div class="card">
-                <div class="card-header">{{ __('Upload video') }}</div>
+            <div class="card shadow">
+                <div class="card-header font-weight-bold">{{ __('Upload video') }}</div>
 
                 <div class="card-body">
 

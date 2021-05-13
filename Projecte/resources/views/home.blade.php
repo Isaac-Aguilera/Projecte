@@ -9,25 +9,25 @@
 <main class="main" role="main">
     <div class="album py-5 bg-light">
         
-        <div class="container">
+        <div class="container" style="margin-top: 60px;">
             <div class="dropdown text-right">
                 <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Categories
+                    Categorys
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <button onclick="cambiarVista(0)" class="dropdown-item" >All</button>
+                    <button onclick="cambiarCategoria(0, '{{ csrf_token() }}')" class="dropdown-item" >All</button>
                     @foreach(App\Models\Categoria::all() as $categoria)
-                        <button onclick="cambiarVista({{ $categoria->id }})" class="dropdown-item" >{{ $categoria->name }}</button>
+                        <button onclick="cambiarCategoria({{ $categoria->id }}, '{{ csrf_token() }}')" class="dropdown-item" >{{ $categoria->name }}</button>
                     @endforeach
                 </div>
             </div>
-            <div class="row">
+            <div id="videos" class="row">
                 @foreach(Video::orderBy('created_at','DESC')->get() as $video)
                 <div class="col-lg-4 col-md-6 col-sm-6">
 
                     <div class="card mb-4 shadow">
                         <a href="{{ route('video', $video->id) }}">
-                            <video class="miniaturas w-100 p-0 m-0"  src="../{{ $video->video_path }}" poster="../{{ $video->image }}"  onmouseover="bigImg(this)" onmouseout="normalImg(this)" loop preload="none" muted="muted"></video>
+                            <video class="miniaturas w-100 p-0 m-0"  src="/{{ $video->video_path }}" poster="/{{ $video->image }}"  onmouseover="bigImg(this)" onmouseout="normalImg(this)" loop preload="none" muted="muted"></video>
                         </a>
                         <div class="card-body">
                             <div class="row">
@@ -64,24 +64,8 @@
                 @endforeach
             </div>
         </div>
+        
 </main>
 @endsection
-<script type="text/javascript">
-    function bigImg(x) {
-        x.autoplay = true;
-        x.preload = "auto";
-        if(x.readyState == 4) {
-            x.play();
-        }
-    }
 
-    function normalImg(x) {
-        x.autoplay = false;
-        if(x.readyState == 4) {
-            x.pause();
-            var v = x.src
-            x.src = "";
-            x.src = v;
-        }    
-    }
-</script>
+<script type="text/javascript" src="{{ asset('js/home.js') }}"></script>

@@ -9,7 +9,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>Goocrux</title>
-    <link rel="icon" href="http://example.com/favicon.png">
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
@@ -36,12 +36,11 @@
 *::after {
   box-sizing: border-box;
 }
-        .neon-button {
+.neon-button {
 
   display: inline-block;
   cursor: pointer;
   text-decoration: none;
-  color: var(--clr-neon);
   border: var(--clr-neon) 0.125em solid;
   padding: 0.25em 1em;
   border-radius: 0.25em;
@@ -96,7 +95,7 @@
 </head>
 <body>
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-dark bg-dark shadow-sm ">
+        <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
             <div class="container">
                 <a class="navbar-brand neon-button" href="{{ url('/') }}">
                 Goocrux
@@ -208,6 +207,10 @@
             @yield('content')
         </main>
     </div>
+    <a id="back-to-top" href="#" class="btn btn-light btn-lg back-to-top" role="button" style="position: fixed;
+        bottom: 25px;
+        right: 25px;
+        display: none;"><i class="fa fa-chevron-up"></i></a>
 </body>
 </html>
 
@@ -231,3 +234,22 @@
         });
     }
 </script>
+
+<script>
+    $(document).ready(function(){
+        $(window).scroll(function () {
+                if ($(this).scrollTop() > 50) {
+                    $('#back-to-top').fadeIn();
+                } else {
+                    $('#back-to-top').fadeOut();
+                }
+            });
+            // scroll body to 0px on click
+            $('#back-to-top').click(function () {
+                $('body,html').animate({
+                    scrollTop: 0
+                }, 400);
+                return false;
+            });
+    });
+    </script>
