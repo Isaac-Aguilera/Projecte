@@ -3,7 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Producte;
+use App\Models\Categoria;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
 
 class ProducteController extends Controller
 {
@@ -24,7 +28,7 @@ class ProducteController extends Controller
      */
     public function create()
     {
-        //
+        return view('producte.create')->with('categories', Categoria::orderBy('name')->get());
     }
 
     /**
@@ -35,7 +39,25 @@ class ProducteController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->all();
+        Validator::make($data, [
+            'category_id' => ['required','integer'],
+            'name' => ['required','string','min:5','max:255'],
+            'description' => ['required','min:5'],
+            'image' => ['required','image', 'dimensions:min_width=200,min_height=200'],
+            'preu' => ['required','integer'],
+            'prod_url' => ['required','string','min:5'],
+            
+        ])->validate();
+        
+        $i = $data['image']->store('images');
+        $data['image'] = $i;
+        $producte = new Producte($data);
+        $producte->save();
+        
+        
+        
+        return redirect()->route('pujarProducte')->with(['message' => 'Product created correctly']);
     }
 
     /**

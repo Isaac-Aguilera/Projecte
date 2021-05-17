@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Models;
-
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -10,20 +9,26 @@ use Illuminate\Notifications\Notifiable;
 /**
  * @property int $id
  * @property string $name
- * @property string $surname
- * @property string $nick
  * @property string $email
  * @property string $password
- * @property string $remember_token
- * @property string $image
- * @property string $role
  * @property string $updated_at
  * @property string $created_at
- * @property Producte[] $productes
+ * 
  */
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
+    /**
+     * The table associated with the model.
+     * 
+     * @var string
+     */
+    protected $table = 'users';
+
+    /**
+     * @var array
+     */
+    protected $fillable = ['name', 'email', 'password'];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -45,22 +50,10 @@ class User extends Authenticatable
     ];
 
     /**
-     * The table associated with the model.
-     * 
-     * @var string
-     */
-    protected $table = 'Users';
-
-    /**
-     * @var array
-     */
-    protected $fillable = ['name', 'surname', 'nick', 'email', 'password', 'remember_token', 'image', 'role', 'updated_at', 'created_at'];
-
-    /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function productes()
+    public function comentaris()
     {
-        return $this->hasMany('App\Models\Producte', 'user_id');
+        return $this->hasMany('App\Models\Comentari', 'user_id');
     }
 }

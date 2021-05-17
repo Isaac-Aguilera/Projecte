@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @property int $id
  * @property int $user_id
+ * @property int $category_id
  * @property string $name
  * @property string $description
  * @property string $image
@@ -14,6 +15,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $prod_url
  * @property string $updated_at
  * @property string $created_at
+ * @property Category $category
  * @property User $user
  */
 class Producte extends Model
@@ -28,7 +30,15 @@ class Producte extends Model
     /**
      * @var array
      */
-    protected $fillable = ['user_id', 'name', 'description', 'image', 'preu', 'prod_url', 'updated_at', 'created_at'];
+    protected $fillable = ['user_id', 'category_id', 'name', 'description', 'image', 'preu', 'prod_url', 'updated_at', 'created_at'];
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function category()
+    {
+        return $this->belongsTo('App\Models\Category', 'category_id');
+    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

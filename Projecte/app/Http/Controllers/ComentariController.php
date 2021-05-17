@@ -48,7 +48,7 @@ class ComentariController extends Controller
         ])->validate();
         $comentari = new Comentari($data);
         $comentari->save();
-        $comentaris = $comentari->video->comentaris->take(2)->count();
+        $comentaris = $comentari->video->comentaris->count();
         
         return array('comentaris' => $comentaris,'id' => $comentari->id, 'nick' => $comentari->user->nick, 'image' => $comentari->user->image);
     }
@@ -107,7 +107,7 @@ class ComentariController extends Controller
         $video_id = $video->id;
         $comentari->delete();
         
-        $comentaris = $video->comentaris->take(1)->count();
+        $comentaris = $video->comentaris->count();
         return array('comentaris' => $comentaris);
     }
 }

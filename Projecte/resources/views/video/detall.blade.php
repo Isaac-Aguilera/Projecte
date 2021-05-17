@@ -82,7 +82,7 @@
                             </div>
                         </div>
                     
-                        <h3>{{ $video->comentaris->count() }} comments</h3>
+                        <h3 id="contador">{{ $video->comentaris->count() }} comments</h3>
                         <textarea placeholder="Write a comment!" name="contingut" id="contingut" class="form-control" rows="5"></textarea>
                     <button onclick="afegirComentari({{ $video->id }}, '{{ csrf_token() }}')" class="btn btn-large btn-block btn-primary mt-3" type="submit">Enviar</button>
                         <div id="comentaris" class="mt-3">

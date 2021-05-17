@@ -47,9 +47,10 @@
                                     <button onclick="eliminarvideo({{ $video->id }})" class="dropdown-item" >Delete</button>
                                 </div>
                             </div>
+                            <a class="text-decoration-none text-dark" href='/video/{{ $video->id }}'>
                             <img height=100 width=180 src="/{{ $video->image }}" alt="">
                             <div style="display:inline-block; vertical-align:top;" class="ml-3">
-                                <span title="{{ $video->title }}"><a class="text-decoration-none text-dark" href='/video/{{ $video->id }}'>{{ Str::limit($video->title,29,"...") }}</a></span>
+                                <span title="{{ $video->title }}">{{ Str::limit($video->title,29,"...") }}</a></span>
                                 <p class="text-muted" title="{{ $video->description }}">{{ Str::limit($video->description,29,"...") }}</p>
                             </div>
                         </td>

@@ -44,12 +44,10 @@
             @if(isset( $mitjanesglob['video']) and $mitjanesglob['video']/$cont2 <= 2.4)
                     <div class="card shadow w-75 mx-auto mt-5">                
                         <div class="row">
-                            <div class="col-12">
-                                <img class="card-img-top w-50" src="{{ asset('cams.jpeg') }}" alt="Card image">
+                            <div class="col-5">
+                                <img class="card-img-top w-100 h-100" style="object-fit: cover;" src="{{ asset('cams.jpeg') }}" alt="Card image">
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-12">
+                            <div class="col-7">
                                 <div class="card-body">
                                     <h4 class="card-title font-weight-bold">Video quality <i class="bi bi-camera-reels-fill"></i></h4>
                                     <p class="card-text text-muted">Your latest videos haven't got really good valorations on video quality. <br><br>
@@ -60,16 +58,15 @@
                             </div>
                         </div>
                     </div>
-                    </div>
             @endif
 
             @if(isset( $mitjanesglob['audio']) and $mitjanesglob['audio']/$cont2 <= 2.4)
             <div class="card shadow w-75 mx-auto mt-3">                
                 <div class="row">
-                    <div class="col-4">
-                        <img class="card-img-top w-100" src="{{ asset('mic.jpg') }}" alt="Card image">
+                    <div class="col-5">
+                        <img class="card-img-top w-100 h-100" style="object-fit: cover" src="{{ asset('mic.jpg') }}" alt="Card image">
                     </div>
-                    <div class="col-8">
+                    <div class="col-7">
                         <div class="card-body">
                             <h4 class="card-title font-weight-bold">Audio quality <i class="bi bi-mic-fill"></i></h4>
                             <p class="card-text text-muted">Your latest videos haven't got really good valorations on audio quality. <br><br>
@@ -85,14 +82,14 @@
             @if(isset( $mitjanesglob['content']) and $mitjanesglob['content']/$cont2 <= 2.4)
             <div class="card shadow w-75 mx-auto mt-3 mb-5">                
                 <div class="row">
-                    <div class="col-4">
-                        <img class="card-img-top" src="{{ asset('video-marketing.jpg') }}" alt="Card image">
+                    <div class="col-5">
+                        <img class="card-img-top w-100 h-100" style="object-fit: cover;" src="{{ asset('video-marketing.jpg') }}" alt="Card image">
                     </div>
-                    <div class="col-8">
+                    <div class="col-7">
                         <div class="card-body">
                             <h4 class="card-title font-weight-bold">Content quality <i class="bi bi-cloudy-fill"></i></h4>
                             <p class="card-text text-muted">Your latest videos haven't got really good valorations on content quality. <br><br>
-                                We know that is hard to offer a content that everyone likes. <br><br>
+                                We know that is hard to offer a content that everyone likes.
                                 But our users are not valorating it good, we are just warning you, but the decision to change is yours. <br><br>
                                 Try to think about new creative content but if you are happy with what you are doing no one can stop you.<br><br>
                             </p>

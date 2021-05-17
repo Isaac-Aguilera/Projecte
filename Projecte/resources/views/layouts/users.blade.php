@@ -10,29 +10,38 @@
 
         @if ($user->banner == null)
           @if (session('incorrecte')) 
-          <div class="alert alert-danger">{{ session()->get('incorrecte') }}</div>
+          <div class="alert alert-danger col-4 mx-auto mt-2">{{ session()->get('incorrecte') }}!</div>
           @endif
+          @if(Auth::user() != null)
           @if($user->id == Auth::user()->id)
-          <button class="btn btn-light position-absolute fixed-top" style="border-radius: 0;" onclick="canviarBanner()"><i class="bi bi-pencil-fill" style="font-size: 1.5rem;"></i></button>
+          <button class="btn btn-light position-absolute fixed-top" style="border-radius: 0; z-index:0;" onclick="canviarBanner()"><i class="bi bi-pencil-fill" style="font-size: 1.5rem;"></i></button>
+          @endif
           @endif
         @else
         @if (session('correcte')) 
           <img class="centered-and-cropped w-100"  height="200" src="/{{ $user->banner }}">
+          @if(Auth::user() != null)
           @if($user->id == Auth::user()->id)
-          <button class="btn btn-light position-absolute fixed-top" style="border-radius: 0;" onclick="canviarBanner()"><i class="bi bi-pencil-fill" style="font-size: 1.5rem;"></i></button>
+          <button class="btn btn-light position-absolute fixed-top" style="border-radius: 0; z-index:0;" onclick="canviarBanner()"><i class="bi bi-pencil-fill" style="font-size: 1.5rem;"></i></button>
           @endif
+          @endif
+          
         @else
           @if (session('incorrecte')) 
-          <div class="alert alert-danger">{{ session()->get('incorrecte') }}</div>
+          <div class="alert alert-danger col-4 mx-auto mt-2">{{ session()->get('incorrecte') }}!</div>
           @endif
           <img class="centered-and-cropped w-100"  height="200" src="/{{ $user->banner }}">
+          @if(Auth::user() != null)
             @if($user->id == Auth::user()->id)
-          <button class="btn btn-light position-absolute fixed-top" style="border-radius: 0;" onclick="canviarBanner()"><i class="bi bi-pencil-fill" style="font-size: 1.5rem;"></i></button>
+           
+          <button class="btn btn-light position-absolute fixed-top" style="border-radius: 0; z-index:0;" onclick="canviarBanner()"><i class="bi bi-pencil-fill" style="font-size: 1.5rem;"></i></button>
+          @endif
           @endif
         @endif
         @endif
     </div>
 </div>
+@if(Auth::user() != null)
 @if(Auth::user()->id == $user->id)
         <div class="row">
             <div class="col">
@@ -57,6 +66,7 @@
                   </div>
             </div>   
         </div>
+@endif
         @else
 
         <div class="row">
@@ -87,6 +97,7 @@
                     <a class="nav-link" href="{{ route('userinfo', [$user->nick]) }}">MORE INFO</a>
                 </li>
                 @if($user->videos->count() >= 1)
+                @if(Auth::user() != null)
                 @if($user->id == Auth::user()->id)
                 <li class="nav-item active">
                   <a class="nav-link" href="{{ route('uservidmanager', [$user->nick]) }}">MANAGE VIDEOS</a>
@@ -94,6 +105,7 @@
                 <li class="nav-item active">
                   <a class="nav-link" href="{{ route('userecommendations', [$user->nick]) }}">RECOMMENDATIONS</a>
                 </li>
+                @endif
                 @endif
                 @endif
             </ul>

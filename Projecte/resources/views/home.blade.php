@@ -12,7 +12,7 @@
         <div class="container" style="margin-top: 60px;">
             <div class="dropdown text-right">
                 <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Categorys
+                    Categories
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                     <button onclick="cambiarCategoria(0, '{{ csrf_token() }}')" class="dropdown-item" >All</button>

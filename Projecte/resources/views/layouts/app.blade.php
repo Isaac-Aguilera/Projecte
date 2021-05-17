@@ -95,10 +95,15 @@
 </head>
 <body>
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark" style="z-index: 1;">
             <div class="container">
+                
                 <a class="navbar-brand neon-button" href="{{ url('/') }}">
-                Goocrux
+                    Goocrux
+                </a>
+
+                <a class="navbar-brand neon-button" href="{{ url('/') }}">
+                    Shop
                 </a>
 
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
@@ -178,13 +183,13 @@
 
                                 <div class="dropdown-menu dropright" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item"  href="{{ route('user', Auth::user()->nick) }}">
-                                        Perfil
+                                        Profile
                                     </a>
                                     <a class="dropdown-item" href="{{ route('config') }}">
-                                        Configuració
+                                        Config
                                     </a>
                                     <a class="dropdown-item"  href="{{ route('configPassword') }}">
-                                        Contrasenya
+                                        Password
                                     </a>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();

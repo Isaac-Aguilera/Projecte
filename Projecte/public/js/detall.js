@@ -36,6 +36,7 @@ function eliminarComentari(id, token) {
             if(!response['comentaris']) {
                 document.getElementById('comentaris').innerHTML += '<h5>There are no comments!</h5>';
             }
+            document.getElementById('contador').innerHTML = response['comentaris']+" comments";
             document.getElementById(id).remove();
         }
     });
@@ -79,6 +80,7 @@ function afegirComentari(video_id, token) {
             } else {
                 document.getElementById('comentaris').innerHTML += afegir;
             }
+            document.getElementById('contador').innerHTML = response['comentaris']+" comments";
             
         }
     });

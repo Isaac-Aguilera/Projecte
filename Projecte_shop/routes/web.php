@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\CategoriaController;
+use App\Http\Controllers\ProducteController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,5 +17,22 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('home');
 });
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::get('/config', [UserController::class, 'edit'])->name('config');
+Route::post('/config', [UserController::class, 'update'])->name('config');
+
+Route::get('/config/password', [UserController::class, 'password'])->name('configPassword');
+Route::post('/config/password', [UserController::class, 'updatePassword'])->name('configPassword');
+
+Route::get('/pujarProducte', [ProducteController::class, 'create'])->name('pujarProducte');
+Route::post('/pujarProducte', [ProducteController::class, 'store'])->name('pujarProducte');
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

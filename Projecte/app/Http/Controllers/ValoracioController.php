@@ -62,7 +62,7 @@ class ValoracioController extends Controller
         $valoracions = Valoracio::all()->where('video_id', '=', $video_id)->groupBy('name');
         $video = Video::find($video_id);
         $user_vid_id = $video->user_id;
-        $array_cont = array(15,50,100,250,500,1000,5000,10000);
+        $array_cont = array(2,15,50,100,250,500,1000,5000,10000);
         foreach($valoracions as $nom => $name) {
             $contador = 0;
             $suma = 0;
