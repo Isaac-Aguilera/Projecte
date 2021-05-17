@@ -109,16 +109,19 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mx-auto">
-                        <form class="d-flex" method="GET">
+                        <form class="d-flex" method="GET" action="{{ route('search') }}">
                             <input class="form-control me-2 col-10 w-100" type="search" placeholder="Search" aria-label="Search" id="search" name="search">
                             <button class="btn btn-outline-success ml-2" type="submit">Search</button>
-                          </form>
+                        </form>
                     </ul>    
                 </div>
                 @guest
                         
                 @else
                     <ul class="navbar-nav">
+                        <a class="nav-link text-light" href="{{ route('pujarProducte') }}" >
+                            <i class="bi bi-plus-circle"></i>
+                        </a>
                         <div class="dropdown">
                             <a id="navbarDropdown" class="nav-link text-light dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                 {{ Auth::user()->name }}

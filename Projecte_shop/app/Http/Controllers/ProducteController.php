@@ -28,6 +28,7 @@ class ProducteController extends Controller
      */
     public function create()
     {
+        $this->middleware('auth');
         return view('producte.create')->with('categories', Categoria::orderBy('name')->get());
     }
 
@@ -39,13 +40,15 @@ class ProducteController extends Controller
      */
     public function store(Request $request)
     {
+        $this->middleware('auth');
+
         $data = $request->all();
         Validator::make($data, [
             'category_id' => ['required','integer'],
             'name' => ['required','string','min:5','max:255'],
             'description' => ['required','min:5'],
             'image' => ['required','image', 'dimensions:min_width=200,min_height=200'],
-            'preu' => ['required','integer'],
+            'preu' => ['required','numeric'],
             'prod_url' => ['required','string','min:5'],
             
         ])->validate();
@@ -77,9 +80,16 @@ class ProducteController extends Controller
      * @param  \App\Models\Producte  $producte
      * @return \Illuminate\Http\Response
      */
-    public function edit(Producte $producte)
+    public function edit(Request $request)
     {
-        //
+        $this->middleware('auth');
+        $producte = Producte::find($request->route('id'));
+        if (isset($producte)) {
+            return view('producte.edit')->with(['producte' => $producte])->with('categories', Categoria::orderBy('name')->get());
+        } else {
+            return view('producte.edit')->with(['error' => "Product not found!"]);
+        }
+        
     }
 
     /**
@@ -89,9 +99,30 @@ class ProducteController extends Controller
      * @param  \App\Models\Producte  $producte
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Producte $producte)
+    public function update(Request $request)
     {
-        //
+        $this->middleware('auth');
+
+        $producte = Producte::find($request->route('id'));
+        $data = $request->all();
+        Validator::make($data, [
+            'category_id' => ['required','integer'],
+            'name' => ['required','string','min:5','max:255'],
+            'description' => ['required','min:5'],
+            'image' => ['image', 'dimensions:min_width=200,min_height=200'],
+            'preu' => ['required','numeric'],
+            'prod_url' => ['required','string','min:5'],
+            
+        ])->validate();
+        if(isset($data['image'])) {
+            $i = $data['image']->store('images');
+            Storage::delete($producte->image);
+            $data['image'] = $i;
+        }
+        $producte->update($data);
+        
+        return redirect()->route('editarProducte', $producte->id)->with(['message' => 'Product updated correctly']);
+
     }
 
     /**
@@ -103,5 +134,33 @@ class ProducteController extends Controller
     public function destroy(Producte $producte)
     {
         //
+    }
+
+    public function search(Request $request){
+        // Get the search value from the request
+        $search = $request->input('search');
+
+        if(User::where('name', 'LIKE', "%{$search}%")->first()) {
+            $user = User::where('name', 'LIKE', "%{$search}%")->first();
+
+            $id = $user->id;
+            $username = User::where('name','LIKE','%'.$search.'%');
+            $posts = Producte::query()
+            ->where('name', 'LIKE', "%{$search}%")
+            ->orWhere('user_id', 'LIKE', "%{$id}%")
+            ->orderBy('views','DESC')
+            ->get();
+        }else {
+            $posts = Producte::query()
+            ->where('name', 'LIKE', "%{$search}%")
+            ->orderBy('views','DESC')
+            ->get();
+        }
+
+
+        // Search in the title and body columns from the posts table
+    
+        // Return the search view with the resluts compacted
+        return view('producte.search')->with('productesearch' , $posts);
     }
 }

@@ -132,7 +132,13 @@ class VideoController extends Controller
     {
         $this->middleware('auth');
         $video = Video::find($request->route('id'));
-        return view('video.edit')->with('video' , $video)->with('categories', Categoria::orderBy('name')->get());
+        if (isset($video)) {
+            $video->increment('views',1);
+            return view('video.edit')->with('video' , $video)->with('categories', Categoria::orderBy('name')->get());
+        } else {
+            return view('video.edit')->with(['error' => "Video not found!"]);
+        }
+        
     }
 
     /**
