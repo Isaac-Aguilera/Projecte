@@ -44,9 +44,28 @@
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                     <a class="text-decoration-none" href="/editarVideo/{{ $video->id }}"><button class="dropdown-item" >Edit</button></a>
-                                    <button onclick="eliminarvideo({{ $video->id }}, '{{ csrf_token() }}')" class="dropdown-item" >Delete</button>
+                                    <button type="button" class="dropdown-item btn btn-danger float-right" onclick="$('#modal{{ $video->id }}').modal('toggle')" data-bs-toggle="modal{{ $video->id }}" data-bs-target="modal">Delete</button>
                                 </div>
                             </div>
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="modal{{ $video->id }}" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                    <h5 class="modal-title" id="modalLabel">Confirm delete video</h5>
+                                    </div>
+                                    <div class="modal-body">
+                                        Do you really want delete the video?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" onclick="$('#modal{{ $video->id }}').modal('toggle')" data-bs-dismiss="modal{{ $video->id }}">Cancel</button>
+                                        <button type="button" class="btn btn-danger" onclick="eliminarvideo({{ $video->id }}, '{{ csrf_token() }}')" >Confirm</button>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+
                             <a class="text-decoration-none text-dark" href='/video/{{ $video->id }}'>
                             <img height=100 width=180 src="/{{ $video->image }}" alt="">
                             <div style="display:inline-block; vertical-align:top;" class="ml-3">

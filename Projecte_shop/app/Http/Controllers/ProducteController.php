@@ -29,7 +29,9 @@ class ProducteController extends Controller
      */
     public function create()
     {
-        $this->middleware('auth');
+        if (!isset(Auth::user()->id)) {
+            return redirect('login');
+        }
         return view('producte.create')->with('categories', Categoria::orderBy('name')->get());
     }
 
@@ -88,10 +90,12 @@ class ProducteController extends Controller
      */
     public function edit(Request $request)
     {
-        $this->middleware('auth');
+        if (!isset(Auth::user()->id)) {
+            return redirect('login');
+        }
         $producte = Producte::find($request->route('id'));
         if (isset($producte)) {
-            return view('producte.edit')->with(['producte' => $producte])->with('categories', Categoria::orderBy('name')->get());
+            return view('producte.edit')->with(['producte' => $producte])->with('categories', Categoria::orderBy('name')->get())->with('nomCategoria', Categoria::find($producte->category_id)->name);
         } else {
             return view('producte.edit')->with(['error' => "Product not found!"]);
         }
@@ -137,13 +141,11 @@ class ProducteController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy(Request $request)
-    {
-        $id = $request->route('id');
+    {   
+        $id = $request['id'];
         $producte = Producte::find($id);
-        if(Auth::user()->id == $producte->user_id) {
-            Storage::delete($producte>image);
-            $producte->delete();
-        }
+        Storage::delete($producte->image);
+        $producte->delete();
     }
 
     /**

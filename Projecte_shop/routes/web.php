@@ -36,12 +36,21 @@ Route::get('/pujarProducte', [ProducteController::class, 'create'])->name('pujar
 Route::post('/pujarProducte', [ProducteController::class, 'store'])->name('pujarProducte');
 Route::get('/editarProducte/{id}', [ProducteController::class, 'edit'])->name('editarProducte');
 Route::post('/editarProducte/{id}', [ProducteController::class, 'update'])->name('editarProducte');
-Route::post('/eliminarProducte/{id}', [ProducteController::class, 'destroy'])->name('eliminarProducte');
+Route::post('/eliminarProducte', [ProducteController::class, 'destroy'])->name('eliminarProducte');
 
 Route::get('/search', [ProducteController::class, 'search'])->name('search');
 
-Route::post('/aaa', [CategoriaController::class, 'index'])->name('aaa');
+Route::post('/cambiarCategoria', [CategoriaController::class, 'index'])->name('cambiarCategoria');
 
 Auth::routes();
+
+
+Route::get('/register', function() {
+    return redirect('/');
+});
+
+Route::post('/register', function() {
+    return redirect('/');
+});
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

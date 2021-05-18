@@ -40,9 +40,14 @@
                             </div>
                             <div class="card-footer">
                                 <div class="row">
-                                        <button onclick="window.location='{{ $producte->prod_url }}'" class="btn btn-lg btn-block w-100 h-100 font-weight-bold" style="background-color:#ffa700; color: white;">
-                                            BUY IT NOW ON amazon.com <i class="fa fa-amazon"></i>
-                                        </button>
+                                    <button onclick="window.location='{{ $producte->prod_url }}'" class="btn btn-lg btn-block w-100 h-100 font-weight-bold" style="background-color:#ffa700; color: white;">
+                                        BUY IT NOW ON amazon.com <i class="fa fa-amazon"></i>
+                                    </button>
+                                    @if (isset(Auth::user()->id))
+                                        <a href="/editarProducte/{{ $producte->id }}" class="btn btn-primary btn-lg btn-block w-100 h-100 font-weight-bold">
+                                            Edit
+                                        </a>
+                                    @endif
                                 </div>
                             </div>
                         </div>

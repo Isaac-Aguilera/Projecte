@@ -1,7 +1,7 @@
 function cambiarCategoria(id, token) {
     
     $.ajax({
-        url: '/aaa',
+        url: '/cambiarCategoria',
         method: 'post',
         data: {
             '_token': token,

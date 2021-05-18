@@ -60,6 +60,9 @@ class UserController extends Controller
      */
     public function edit()
     {
+        if (!isset(Auth::user()->id)) {
+            return redirect('login');
+        }
         return view('user.config')->with(['user' => Auth::user()]);
     }
 
@@ -98,7 +101,9 @@ class UserController extends Controller
 
     public function password()
     {
-        
+        if (!isset(Auth::user()->id)) {
+            return redirect('login');
+        }
         return view('user.password');
         
     }

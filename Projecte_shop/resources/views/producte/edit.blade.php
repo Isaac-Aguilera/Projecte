@@ -2,9 +2,9 @@
 
 @section('content')
 @stack('styles')
-<link href="{{ asset('css/progress.css') }}" rel="stylesheet">
+<link href="{{ asset('css/edit.css') }}" rel="stylesheet">
 
-<div class="container" style="margin-top: 100px;">
+<div id="container" class="container" style="margin-top: 100px;">
     <div class="row justify-content-center">
         <div class="col-md-8">
             @if (isset($error))
@@ -15,8 +15,26 @@
                     </div>
                 </div>   
             @else
-                <div class="card shadow">
-                    <div class="card-header font-weight-bold">{{ __('Edit product') }}</div>
+                <div id="card" class="card shadow">
+                    <div class="card-header font-weight-bold">{{ __('Edit product') }}<button type="button" class="btn btn-danger float-right" onclick="$('#modal').modal('toggle')" data-bs-toggle="modal" data-bs-target="modal">Delete product</button></div>
+                    
+                    <!-- Modal -->
+                    <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                            <h5 class="modal-title" id="modalLabel">Confirm delete product</h5>
+                            </div>
+                            <div class="modal-body">
+                                Do you really want delete the product?
+                            </div>
+                            <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" onclick="$('#modal').modal('toggle')" data-bs-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn btn-danger" onclick="eliminarProducte({{ $producte->id }}, '{{ csrf_token() }}')" >Confirm</button>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
 
                     <div class="card-body">
 
@@ -33,7 +51,7 @@
                                 <label for="category_id" class="col-md-4 col-form-label text-md-right">{{ __('Category') }}</label>
                                 <div class="col-md-6">
                                     <select id="category_id" name="category_id" class="custom-select @error('category_id') is-invalid @enderror" aria-label="Default select example">
-                                        <option value="{{ $producte->category_id }}" selected>{{ $categories[$producte->category_id]->name }}</option>
+                                        <option value="{{ $producte->category_id }}" selected>{{ $nomCategoria }}</option>
                                         @foreach($categories as $categoria)
                                             <option value="{{ $categoria->id }}">{{ $categoria->name }}</option>
                                         @endforeach
@@ -78,7 +96,7 @@
                             <div class="form-group row">
                                 <label for="image" class="col-md-4 col-form-label text-md-right">{{ __('Image') }}</label>
                                 <div class="col-md-6">
-                                    <img class="img-fluid mb-3"  src="/{{ $producte->image }}" alt="">
+                                    <img class="card-img-top miniaturas"  src="/{{ $producte->image }}" alt="">
                                     <input style="max-width: 120%;" id="image" class="@error('image') is-invalid @enderror" type="file" name="image">
                                     @error('image')
                                         <span class="invalid-feedback" role="alert">
@@ -132,3 +150,5 @@
 </div>
 
 @endsection
+
+<script type="text/javascript" src="{{ asset('js/edit.js') }}"></script>
