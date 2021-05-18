@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\VideoController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
@@ -32,82 +33,6 @@ class UserController extends Controller
         } else {
             return view('user.detall')->with(['error' => "User not found!"]);
         }
-    }
-
-    public function uservid(Request $request,$nick)
-    {
-        $user = User::where('nick',$nick)->first();
-        if (isset($user)) {
-            $posts = Video::query()->where("user_id", "=", "{$user->id}")->orderBy('created_at','DESC')->get();
-            return view('user.videos')->with(['user' => $user, 'posts' => $posts]);
-        } else {
-            return view('user.videos')->with(['error' => "User not found!"]);
-        }
-    }
-
-    public function userinfo(Request $request,$nick)
-    {
-        $user = User::where('nick',$nick)->first();
-        if (isset($user)) {
-
-            $posts = Video::query()->select('views')->where("user_id", "=", "{$user->id}")->get();
-            return view('user.info')->with(['user' => $user,'views' => $posts]);
-        } else {
-            return view('user.info')->with(['error' => "User not found!"]);
-        }
-    }
-
-    public function usersearch(Request $request,$nick){
-        // Get the search value from the request
-        $search = $request->input('search');
-
-
-        if(User::where('nick', 'LIKE', "%{$nick}%")->first()) {
-            $user = User::where('nick', '=', $nick)->first();
-
-            $id = $user->id;
-
- 
-            $posts = Video::query()
-            ->where('user_id', '=', $id)
-            ->where('title', 'LIKE', "%{$search}%")
-            ->orderBy('views','DESC')
-            ->get();
-        }else {
-            $posts = Video::query()
-            ->where('title', 'LIKE', "%{$search}%")
-            ->orderBy('views','DESC')
-            ->get();
-        }
-
-        return view('user.search')->with(['posts' => $posts, 'user' => $user]);
-    }
-
-    public function uservidmanager(Request $request,$nick)
-    {   
-        $this->middleware('auth');
-        $user = User::where('nick',$nick)->first();
-
-        if (isset($user)) {
-            $posts = Video::query()->where("user_id", "=", "{$user->id}")->orderBy('created_at','DESC')->get();
-            return view('user.manage')->with(['user' => $user, 'posts' => $posts]);
-        } else {
-            return view('user.videos')->with(['error' => "User not found!"]);
-        }
-    }
-
-    public function userecommendations(Request $request, $nick)
-    {
-        $this->middleware('auth');
-        $user = User::where('nick',$nick)->first();
-
-        if (isset($user)) {
-            $posts = Video::query()->where("user_id", "=", "{$user->id}")->orderBy('created_at','DESC')->get();
-            return view('user.recommendations')->with(['user' => $user, 'posts' => $posts]);
-        } else {
-            return view('user.videos')->with(['error' => "User not found!"]);
-        }
-        
     }
 
     /**
@@ -148,18 +73,22 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit()
-    {
-        return view('user.config')->with(['user' => Auth::user()]);
+    {   
+        if (isset(Auth::user()->id)) {
+            return view('user.config')->with(['user' => Auth::user()]);
+        } else {
+            return view('user.config')->with(['error' => "User not found!"]);
+        }
+        
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, User $user)
+    public function update(Request $request)
     {
         $data = $request->all();
         $id = Auth::user()->id;
@@ -187,15 +116,54 @@ class UserController extends Controller
         return redirect()->route('config')->with(['message' => 'User updated!']);
     }
 
-    public function password()
-    {
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\User  $user
+     * @return \Illuminate\Http\Response
+     */
+     public function destroy(Request $request)
+     {
+        $id = $request['id'];
+        $user = User::find($id);
+        foreach ($user->videos as $video) {
+            Storage::delete($video->video_path);
+            Storage::delete($video->image);
+            $video->delete();
+        }
+        Storage::delete($user->image);
+        Storage::delete($user->banner);
+        $user->delete();
         
-        return view('user.password');
+     }
+
+    /**
+     * Change password.
+     *
+     * @return \Illuminate\Http\Response
+     */
+     public function password()
+    {
+        if (isset(Auth::user()->id)) {
+            return view('user.password');
+        } else {
+            return redirect('login');
+        }
+        
         
     }
 
+    /**
+     * Update the password.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function updatePassword(Request $request)
     {
+        if (!isset(Auth::user()->id)) {
+            return redirect('login');
+        }
         $data = $request->all();
 
         Validator::make($data, [
@@ -211,12 +179,23 @@ class UserController extends Controller
         return redirect()->route('configPassword')->with(['message' => 'Password updated!']);
     }
 
-
+    /**
+     * Update the user description.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function canviardesc(Request $request) {
         Auth::user()->channel_desc = $request["desc"];
         Auth::user()->save();
     }
 
+    /**
+     * Update the user banner.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function canviarbanner(Request $request) {
         $f = $request->file('img_logo');
         
@@ -234,14 +213,115 @@ class UserController extends Controller
         $nick = Auth::user()->nick;
         return redirect('/user/'.$nick.'/info')->with(['user' => Auth::user(),'views' => $posts,'correcte' => "Done Correctly"]);
     }
+
     /**
-     * Remove the specified resource from storage.
+     * View user videos.
      *
-     * @param  \App\Models\User  $user
+     * @param  \Illuminate\Http\Request  $request
+     * @param  String  $nick
      * @return \Illuminate\Http\Response
      */
-     public function destroy(Request $request)
-     {
-        //
-     }
+    public function uservid(Request $request,$nick)
+    {
+        $user = User::where('nick',$nick)->first();
+        if (isset($user)) {
+            $posts = Video::query()->where("user_id", "=", "{$user->id}")->orderBy('created_at','DESC')->get();
+            return view('user.videos')->with(['user' => $user, 'posts' => $posts]);
+        } else {
+            return view('user.videos')->with(['error' => "User not found!"]);
+        }
+    }
+
+    /**
+     * View user info.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  String  $nick
+     * @return \Illuminate\Http\Response
+     */
+    public function userinfo(Request $request,$nick)
+    {
+        $user = User::where('nick',$nick)->first();
+        if (isset($user)) {
+
+            $posts = Video::query()->select('views')->where("user_id", "=", "{$user->id}")->get();
+            return view('user.info')->with(['user' => $user,'views' => $posts]);
+        } else {
+            return view('user.info')->with(['error' => "User not found!"]);
+        }
+    }
+
+    /**
+     * View user search.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  String  $nick
+     * @return \Illuminate\Http\Response
+     */
+    public function usersearch(Request $request,$nick){
+        // Get the search value from the request
+        $search = $request->input('search');
+
+
+        if(User::where('nick', 'LIKE', "%{$nick}%")->first()) {
+            $user = User::where('nick', '=', $nick)->first();
+
+            $id = $user->id;
+
+ 
+            $posts = Video::query()
+            ->where('user_id', '=', $id)
+            ->where('title', 'LIKE', "%{$search}%")
+            ->orderBy('views','DESC')
+            ->get();
+        }else {
+            $posts = Video::query()
+            ->where('title', 'LIKE', "%{$search}%")
+            ->orderBy('views','DESC')
+            ->get();
+        }
+
+        return view('user.search')->with(['posts' => $posts, 'user' => $user]);
+    }
+
+    /**
+     * User manage view.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  String  $nick
+     * @return \Illuminate\Http\Response
+     */
+    public function uservidmanager(Request $request,$nick)
+    {   
+        $this->middleware('auth');
+        $user = User::where('nick',$nick)->first();
+
+        if (isset($user)) {
+            $posts = Video::query()->where("user_id", "=", "{$user->id}")->orderBy('created_at','DESC')->get();
+            return view('user.manage')->with(['user' => $user, 'posts' => $posts]);
+        } else {
+            return view('user.videos')->with(['error' => "User not found!"]);
+        }
+    }
+
+    /**
+     * View user recommendations.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  String  $nick
+     * @return \Illuminate\Http\Response
+     */
+    public function userecommendations(Request $request, $nick)
+    {
+        $this->middleware('auth');
+        $user = User::where('nick',$nick)->first();
+
+        if (isset($user)) {
+            $posts = Video::query()->where("user_id", "=", "{$user->id}")->orderBy('created_at','DESC')->get();
+            return view('user.recommendations')->with(['user' => $user, 'posts' => $posts]);
+        } else {
+            return view('user.videos')->with(['error' => "User not found!"]);
+        }
+        
+    }
 }

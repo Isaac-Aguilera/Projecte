@@ -54,6 +54,8 @@ Route::get('/user/{nick}/managevideos', [UserController::class, 'uservidmanager'
 
 Route::get('/user/{nick}/recommendations', [UserController::class, 'userecommendations'])->name('userecommendations');
 
+Route::post('/eliminarUsuari', [UserController::class, 'destroy'])->name('eliminarUsuari');
+
 Route::delete('/deletevid/{id}', [VideoController::class, 'destroy'])->name('deletevid');
 
 Route::post('/valoracio', [ValoracioController::class, 'store'])->name('valoracio');

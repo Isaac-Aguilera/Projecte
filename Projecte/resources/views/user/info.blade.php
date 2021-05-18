@@ -3,7 +3,8 @@
 <link href="{{ asset('css/home.css') }}" rel="stylesheet">
 @section('content')
 <main class="main" role="main">
-    <div class="container bg-white shadow rounded" style="margin-top: 100px;">
+    
+    <div id="container" class="container bg-white shadow rounded" style="margin-top: 100px;">
       
         @if (isset($error))
         <div class="card">
@@ -22,8 +23,10 @@
             <div id="colDesc" class="col-8">
                 <p class="font-weight-bold">Description</p>
                 <hr>
+                @if(Auth::user() != null)
                 @if($user->id == Auth::user()->id)
-                <button id="desc" class="btn btn-light" style="border-radius: 0;" onclick="editDesc()"><i class="bi bi-pencil-fill" style="font-size: 1.5rem;"></i></button>
+                <button id="desc" class="btn btn-light" style="border-radius: 0;" onclick="editDesc('{{ csrf_token() }}')"><i class="bi bi-pencil-fill" style="font-size: 1.5rem;"></i></button>
+                @endif
                 @endif
                 <span id="descSpan" class="ml-2">{{ $user->channel_desc }}</span>
 
@@ -41,49 +44,5 @@
     </div>
 </main>
 @endsection
-
-
-<script type="text/javascript">
-
-
-    function editDesc() {
-       
-        $valueDesc = document.getElementById("descSpan").innerHTML;
-        $colDesc = document.getElementById("colDesc");
-        $colDesc.innerHTML = "";
-        $colDesc.innerHTML += '<p class="font-weight-bold">Description</p>';
-        $colDesc.innerHTML += '<hr>';
-        $colDesc.innerHTML += '<textarea id="desctextarea" class="form-control" rows="5">'+$valueDesc+'</textarea><br>';
-        $colDesc.innerHTML += '<input id="ShowButton" class="btn btn-lg btn-block btn-success mb-3" type="submit" value="Save" onclick="guardarDesc()">';
-    }
-
-    function guardarDesc() {
-
-        desc = document.getElementById("desctextarea").value;
-
-        console.log(desc);
-        $.ajax({
-                    url: '/canviardesc',
-                    method: 'POST',
-                    data: {
-                        '_token': '{{ csrf_token() }}',
-                        'desc': desc,
-                    },
-                    error: function(response){
-                        alert(response['statusText']);
-                    },
-                    success: function(response) {
-                        $colDesc = document.getElementById("colDesc");
-                        $colDesc.innerHTML = "";
-
-                        $colDesc.innerHTML += '<p class="font-weight-bold">Description</p>';
-                        $colDesc.innerHTML += '<hr>';
-                        $colDesc.innerHTML += '<button id="desc" class="btn btn-light" style="border-radius: 0;" onclick="editDesc()"><i class="bi bi-pencil-fill" style="font-size: 1.5rem;"></i></button>';
-                        $colDesc.innerHTML += '<span id="descSpan" class="ml-2">'+desc+'</span>';
-
-                    }
-                });
-    }
-
-</script>
     
+<script type="text/javascript" src="{{ asset('js/info.js') }}"></script>

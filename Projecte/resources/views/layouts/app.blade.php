@@ -13,6 +13,7 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
+    <script type="text/javascript" src="{{ asset('js/navbar.js') }}" defer></script>
   
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -138,7 +139,7 @@
                     @else
 
                         <div class="dropdown" style="float: right; padding: 13px">
-                            <a href="#" onclick="netejarnoti()" role="button" data-toggle="dropdown" id="dropdownMenu1" data-target="#" style="float: left" aria-expanded="true">
+                            <a href="#" onclick="netejarnoti({{ csrf_token() }})" role="button" data-toggle="dropdown" id="dropdownMenu1" data-target="#" style="float: left" aria-expanded="true">
                                 <i class="fa fa-bell" style="font-size: 20px; float: left; color: white">
                                 </i>
                             </a>
@@ -218,43 +219,3 @@
         display: none;"><i class="fa fa-chevron-up"></i></a>
 </body>
 </html>
-
-
-<script type="text/javascript">
-
-    function netejarnoti() {
-        $.ajax({
-            url: '/netejarnoti',
-            method: 'POST',
-            data: {
-                '_token': '{{ csrf_token() }}',
-            },
-            error: function(response){
-                alert(response['statusText']);
-            },
-            success: function(response) {
-                
-                document.getElementById("notinumber").innerHTML = "0";
-            }
-        });
-    }
-</script>
-
-<script>
-    $(document).ready(function(){
-        $(window).scroll(function () {
-                if ($(this).scrollTop() > 50) {
-                    $('#back-to-top').fadeIn();
-                } else {
-                    $('#back-to-top').fadeOut();
-                }
-            });
-            // scroll body to 0px on click
-            $('#back-to-top').click(function () {
-                $('body,html').animate({
-                    scrollTop: 0
-                }, 400);
-                return false;
-            });
-    });
-    </script>

@@ -2,7 +2,7 @@
 
 @section('content')
 <main class="main" role="main">
-    <div class="container bg-white shadow rounded" style="margin-top: 100px;">
+    <div id="container" class="container bg-white shadow rounded" style="margin-top: 100px;">
         @include('layouts.users')
         @section('user-content')
         @stop
@@ -44,7 +44,7 @@
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                     <a class="text-decoration-none" href="/editarVideo/{{ $video->id }}"><button class="dropdown-item" >Edit</button></a>
-                                    <button onclick="eliminarvideo({{ $video->id }})" class="dropdown-item" >Delete</button>
+                                    <button onclick="eliminarvideo({{ $video->id }}, '{{ csrf_token() }}')" class="dropdown-item" >Delete</button>
                                 </div>
                             </div>
                             <a class="text-decoration-none text-dark" href='/video/{{ $video->id }}'>
@@ -73,21 +73,4 @@
 </main>
 @endsection
 
-<script type="text/javascript">
-    function eliminarvideo(id) {
-        $.ajax({
-                    url: '/deletevid/'+id,
-                    method: 'delete',
-                    data: {
-                        '_token': '{{ csrf_token() }}',
-                    },
-                    error: function(response){
-                        alert(response['statusText']);
-                    },
-                    success: function(response) {
-                        
-                        document.getElementById(id).remove()
-                    }
-                });
-    }
-</script>
+<script type="text/javascript" src="{{ asset('js/manage.js') }}"></script>

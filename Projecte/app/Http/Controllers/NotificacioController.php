@@ -17,14 +17,6 @@ class NotificacioController extends Controller
         //
     }
 
-    public function netejarnoti() {
-        $notificacions = Notificacio::all()->where('user_id', "=", Auth::user()->id);
-        foreach($notificacions as $noti) {
-            $noti->state = false;
-            $noti->save();
-        }
-    }
-
     /**
      * Show the form for creating a new resource.
      *
@@ -89,5 +81,16 @@ class NotificacioController extends Controller
     public function destroy(Notificacio $notificacio)
     {
         //
+    }
+
+    /**
+     * Remove all notifications for one user.
+     */
+    public function netejarnoti() {
+        $notificacions = Notificacio::all()->where('user_id', "=", Auth::user()->id);
+        foreach($notificacions as $noti) {
+            $noti->state = false;
+            $noti->save();
+        }
     }
 }

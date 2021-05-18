@@ -79,7 +79,6 @@ class ComentariController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Comentari  $comentari
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request)
@@ -96,10 +95,9 @@ class ComentariController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Comentari  $comentari
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, Comentari $comentari)
+    public function destroy(Request $request)
     {
         $id = $request->route('id');
         $comentari = Comentari::find($id);

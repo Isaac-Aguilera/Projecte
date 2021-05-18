@@ -1,23 +1,10 @@
-@media (max-width: 1200px) { 
-    .miniaturas  {
-        width: 357px;
-        height: 145px;
-        object-fit: fill;
-    }
 
-    .card {
-        height: 325px;
-    } 
- }
+.miniaturas  {
+    width: 357px;
+    height: 185px;
+    object-fit: fill;
+}
 
- @media (min-width: 1201px) { 
-    .miniaturas  {
-        width: 357px;
-        height: 185px;
-        object-fit: fill;
-    }
-
-    .card {
-        height: 325px;
-    }
- }
+.card {
+    height: 325px;
+}

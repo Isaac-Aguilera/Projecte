@@ -41,6 +41,9 @@ function eliminarComentari(id, token) {
         }
     });
 }
+
+
+
 function afegirComentari(video_id, token) {
     contingut = document.getElementById('contingut').value;
     document.getElementById('contingut').value = "";
@@ -53,8 +56,44 @@ function afegirComentari(video_id, token) {
             'contingut': contingut
         },
         error: function(response){
-            //alert(response['statusText']);
-            alert("Has de fer login per a poder comentar!");
+            if(response['statusText'] == "Unauthorized") {
+                var alertDiv = `<div class="modal fade"  id="modal2">
+                <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title font-weight-bold">Comment Error</h5>
+                    <button type="button" class="close" data-dismiss="modal"  aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                    </div>
+                    <div class="modal-body">
+                    <p>You have to login to comment!</p>
+                    </div>
+                </div>
+                </div>
+            </div>`;
+                document.getElementById("container").innerHTML+=alertDiv;
+                $('#modal2').modal('toggle');
+            }
+            else {
+                var alertDiv = `<div class="modal fade" id="modal">
+                <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title font-weight-bold">Valorate Error</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                    </div>
+                    <div class="modal-body">
+                    <p>`+response['statusText']+`</p>
+                    </div>
+                </div>
+                </div>
+            </div>`;
+                document.getElementById("container").innerHTML+=alertDiv;
+                $('#modal').modal('toggle');  
+            } 
         },
         success: function(response) {
             afegir = '<div id='+response['id']+'>'+
@@ -85,6 +124,8 @@ function afegirComentari(video_id, token) {
         }
     });
 }
+
+
 function like(id,votacio, token) {
     if (votacio == 'like') {
         if(document.getElementById("like_"+id).className == "bi bi-hand-thumbs-up") {
@@ -97,8 +138,44 @@ function like(id,votacio, token) {
                     'votacio': votacio
                 },
                 error: function(response){
-                    //alert(response['statusText']);
-                    alert("Has de fer login per a poder votar!");
+                    if(response['statusText'] == "Unauthorized") {
+                        var alertDiv = `<div class="modal fade" id="modal3">
+                        <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                            <h5 class="modal-title font-weight-bold">Vote Error</h5>
+                            <button type="button" class="close" data-dismiss="modal"  aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                            </div>
+                            <div class="modal-body">
+                            <p>You have to login to vote!</p>
+                            </div>
+                        </div>
+                        </div>
+                    </div>`;
+                        document.getElementById("container").innerHTML+=alertDiv;
+                        $('#modal3').modal('toggle');
+                    }
+                    else {
+                        var alertDiv = `<div class="modal fade" id="modal">
+                        <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                            <h5 class="modal-title font-weight-bold">Valorate Error</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                            </div>
+                            <div class="modal-body">
+                            <p>`+response['statusText']+`</p>
+                            </div>
+                        </div>
+                        </div>
+                    </div>`;
+                        document.getElementById("container").innerHTML+=alertDiv;
+                        $('#modal').modal('toggle');  
+                    } 
                 },
                 success: function(response) {
                     document.getElementById("dislike_"+id+"_count").innerHTML = response['dislikes'];
@@ -116,8 +193,44 @@ function like(id,votacio, token) {
                     'id': id 
                 },
                 error: function(response){
-                    //alert(response['statusText']);
-                    alert("Has de fer login per a poder votar!");
+                    if(response['statusText'] == "Unauthorized") {
+                        var alertDiv = `<div class="modal fade" id="modal3">
+                        <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                            <h5 class="modal-title font-weight-bold">Vote Error</h5>
+                            <button type="button" class="close" data-dismiss="modal"  aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                            </div>
+                            <div class="modal-body">
+                            <p>You have to login to vote!</p>
+                            </div>
+                        </div>
+                        </div>
+                    </div>`;
+                        document.getElementById("container").innerHTML+=alertDiv;
+                        $('#modal3').modal('toggle');
+                    }
+                    else {
+                        var alertDiv = `<div class="modal fade" id="modal">
+                        <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                            <h5 class="modal-title font-weight-bold">Valorate Error</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                            </div>
+                            <div class="modal-body">
+                            <p>`+response['statusText']+`</p>
+                            </div>
+                        </div>
+                        </div>
+                    </div>`;
+                        document.getElementById("container").innerHTML+=alertDiv;
+                        $('#modal').modal('toggle');  
+                    } 
                 },
                 success: function(response){
                     document.getElementById("like_"+id+"_count").innerHTML = response['likes'];
@@ -136,8 +249,44 @@ function like(id,votacio, token) {
                     'votacio': votacio
                 },
                 error: function(response){
-                    //alert(response['statusText']);
-                    alert("Has de fer login per a poder votar!");
+                    if(response['statusText'] == "Unauthorized") {
+                        var alertDiv = `<div class="modal fade" id="modal3">
+                        <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                            <h5 class="modal-title font-weight-bold">Vote Error</h5>
+                            <button type="button" class="close" data-dismiss="modal"  aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                            </div>
+                            <div class="modal-body">
+                            <p>You have to login to vote!</p>
+                            </div>
+                        </div>
+                        </div>
+                    </div>`;
+                        document.getElementById("container").innerHTML+=alertDiv;
+                        $('#modal3').modal('toggle');
+                    }
+                    else {
+                        var alertDiv = `<div class="modal fade" id="modal">
+                        <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                            <h5 class="modal-title font-weight-bold">Valorate Error</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                            </div>
+                            <div class="modal-body">
+                            <p>`+response['statusText']+`</p>
+                            </div>
+                        </div>
+                        </div>
+                    </div>`;
+                        document.getElementById("container").innerHTML+=alertDiv;
+                        $('#modal').modal('toggle');  
+                    } 
                 },
                 success: function(response) {
                     document.getElementById("like_"+id+"_count").innerHTML = response['likes'];
@@ -155,8 +304,44 @@ function like(id,votacio, token) {
                     'id': id
                 },
                 error: function(response){
-                    //alert(response['statusText']);
-                    alert("Has de fer login per a poder votar!");
+                    if(response['statusText'] == "Unauthorized") {
+                        var alertDiv = `<div class="modal fade" id="modal3">
+                        <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                            <h5 class="modal-title font-weight-bold">Vote Error</h5>
+                            <button type="button" class="close" data-dismiss="modal"  aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                            </div>
+                            <div class="modal-body">
+                            <p>You have to login to vote!</p>
+                            </div>
+                        </div>
+                        </div>
+                    </div>`;
+                        document.getElementById("container").innerHTML+=alertDiv;
+                        $('#modal3').modal('toggle');
+                    }
+                    else {
+                        var alertDiv = `<div class="modal fade" id="modal">
+                        <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                            <h5 class="modal-title font-weight-bold">Valorate Error</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                            </div>
+                            <div class="modal-body">
+                            <p>`+response['statusText']+`</p>
+                            </div>
+                        </div>
+                        </div>
+                    </div>`;
+                        document.getElementById("container").innerHTML+=alertDiv;
+                        $('#modal').modal('toggle');  
+                    } 
                 },
                 success: function(response){
                     document.getElementById("dislike_"+id+"_count").innerHTML = response['dislikes'];
@@ -179,9 +364,42 @@ function valorar(name, id, video_id, token) {
             },
             error: function(response){
                 if(response['statusText'] == "Unauthorized") {
-                    alert("Has de fer login per a poder valorar!");
-                } else {
-                    alert(response['statusText']);
+                    var alertDiv = `<div class="modal fade" id="modal">
+                    <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h5 class="modal-title font-weight-bold">Valorate Error</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                        </div>
+                        <div class="modal-body">
+                        <p>You have to login to valorate!</p>
+                        </div>
+                    </div>
+                    </div>
+                </div>`;
+                    document.getElementById("container").innerHTML+=alertDiv;
+                    $('#modal').modal('toggle');                
+                } 
+                else {
+                    var alertDiv = `<div class="modal fade" id="modal">
+                    <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h5 class="modal-title font-weight-bold">Valorate Error</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                        </div>
+                        <div class="modal-body">
+                        <p>`+response['statusText']+`</p>
+                        </div>
+                    </div>
+                    </div>
+                </div>`;
+                    document.getElementById("container").innerHTML+=alertDiv;
+                    $('#modal').modal('toggle');  
                 } 
             },
             success: function(response){
@@ -210,9 +428,41 @@ function valorar(name, id, video_id, token) {
             },
             error: function(response){
                 if(response['statusText'] == "Unauthorized") {
-                    alert("Has de fer login per a poder valorar!");
-                } else {
-                    alert(response['statusText']);
+                    var alertDiv = `<div class="modal fade" id="modal">
+                    <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h5 class="modal-title font-weight-bold">Valorate Error</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                        </div>
+                        <div class="modal-body">
+                        <p>You have to login to valorate!</p>
+                        </div>
+                    </div>
+                    </div>
+                </div>`;
+                    document.getElementById("container").innerHTML+=alertDiv;
+                    $('#modal').modal('toggle');    
+                }  else {
+                    var alertDiv = `<div class="modal fade" id="modal">
+                    <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h5 class="modal-title font-weight-bold">Valorate Error</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                        </div>
+                        <div class="modal-body">
+                        <p>`+response['statusText']+`</p>
+                        </div>
+                    </div>
+                    </div>
+                </div>`;
+                    document.getElementById("container").innerHTML+=alertDiv;
+                    $('#modal').modal('toggle');  
                 } 
             },
             success: function(response){

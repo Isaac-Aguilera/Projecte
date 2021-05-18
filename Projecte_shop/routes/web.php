@@ -30,12 +30,17 @@ Route::post('/config', [UserController::class, 'update'])->name('config');
 Route::get('/config/password', [UserController::class, 'password'])->name('configPassword');
 Route::post('/config/password', [UserController::class, 'updatePassword'])->name('configPassword');
 
+Route::get('/producte/{id}', [ProducteController::class, 'show'])->name('producte');
+
 Route::get('/pujarProducte', [ProducteController::class, 'create'])->name('pujarProducte');
 Route::post('/pujarProducte', [ProducteController::class, 'store'])->name('pujarProducte');
 Route::get('/editarProducte/{id}', [ProducteController::class, 'edit'])->name('editarProducte');
 Route::post('/editarProducte/{id}', [ProducteController::class, 'update'])->name('editarProducte');
+Route::post('/eliminarProducte/{id}', [ProducteController::class, 'destroy'])->name('eliminarProducte');
 
 Route::get('/search', [ProducteController::class, 'search'])->name('search');
+
+Route::post('/aaa', [CategoriaController::class, 'index'])->name('aaa');
 
 Auth::routes();
 

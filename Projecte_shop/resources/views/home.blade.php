@@ -1,44 +1,59 @@
 @extends('layouts.app')
+@stack('styles')
+<link href="{{ asset('css/home.css') }}" rel="stylesheet">
+<link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
 
 @section('content')
-
-<div class="container" style="margin-top: 100px;">
- 
-    <div class="row">
-        <div class="col-2 shadow fixed-top w-100" style="margin-top: 60px; position:fixed;height:100%;">
-            <div class="d-flex flex-column flex-shrink-0 bg-light" >
-                <ul class="nav nav-pills nav-flush flex-column mb-auto text-center">
-                  <li class="nav-item">
-                      <h1 class="border-bottom">
-                            <button style="background: none;
-                            color: inherit;
-                            border: none;
-                            padding: 0;
-                            font: inherit;
-                            cursor: pointer;
-                            outline: inherit;">
-                                <i class="bi bi-camera-fill mx-auto"></i>
-                            </button>
-                      </h1>
-                                        
-                  </li>
-                  <li>
-                      <h1>
-                          <button style="background: none;
-                          color: inherit;
-                          border: none;
-                          padding: 0;
-                          font: inherit;
-                          cursor: pointer;
-                          outline: inherit;">
-                            <i class="bi bi-mic-fill mx-auto"></i>
-                          </button>
-                      </h1>        
-                  </li>
-                </ul>
-                
-              </div>
-        </div>
+<div class="row">
+<div class="col-2" style="margin-top:80px;">
+    <div id="mySidenav" class="sidenav">
+        <a style="cursor:pointer;" onclick="cambiarCategoria(0,'{{ csrf_token() }}')" class="bg-dark" id="home">Home <i class="bi bi-house-fill"></i></a>
+        <a style="cursor:pointer;" onclick="cambiarCategoria(2,'{{ csrf_token() }}')" class="bg-dark mt-2" id="video">Video <i class="bi bi-camera-fill"></i></a>
+        <a style="cursor:pointer;" onclick="cambiarCategoria(1,'{{ csrf_token() }}')" class="mt-2 bg-dark" id="audio">Audio <i class="bi bi-mic-fill"></i></a>
     </div>
 </div>
+
+<div class="col-10">
+    <main class="main" role="main">
+        <div class="album py-5 bg-light">
+            
+            <div class="container" style="margin-top: 60px;">
+                <div id="productes" class="row">
+                    @foreach(App\Models\Producte::orderBy('created_at','DESC')->get() as $producte)
+                    <div class="col-lg-4 col-md-6 col-sm-6">
+                        <div class="card mb-4 shadow">
+                            <a href="{{ route('producte', $producte->id) }}">
+                              <img class="card-img-top miniaturas" src="/{{ $producte->image }}">
+                            </a>
+                            <div class="card-body d-flex flex-column">  
+                                <p class="card-title font-weight-bolder" title="{{ $producte->name }}">{{ Str::of($producte->name)->limit(29, ' ...') }}</p>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <p class="" title="{{ $producte->description }}">{{ Str::of($producte->description)->limit(170, ' ...') }}</p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <h4 class=" font-weight-bold">{{ $producte->preu }}&euro;</h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <div class="row">
+                                        <button onclick="window.location='{{ $producte->prod_url }}'" class="btn btn-lg btn-block w-100 h-100 font-weight-bold" style="background-color:#ffa700; color: white;">
+                                            BUY IT NOW ON amazon.com <i class="fa fa-amazon"></i>
+                                        </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+            </div>
+    </main>
+</div>
+</div>
+
 @endsection
+
+<script type="text/javascript" src="{{ asset('js/home.js') }}"></script>

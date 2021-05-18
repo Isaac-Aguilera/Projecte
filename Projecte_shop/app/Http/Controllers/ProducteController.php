@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Producte;
 use App\Models\Categoria;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -66,18 +67,23 @@ class ProducteController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Producte  $producte
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function show(Producte $producte)
+    public function show(Request $request)
     {
-        //
+        $producte = Producte::find($request->route('id'));
+        if (isset($producte)) {
+            return view('producte.detall')->with(['producte' => $producte])->with('categories', Categoria::orderBy('name')->get());
+        } else {
+            return view('producte.detall')->with(['error' => "Product not found!"]);
+        }
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Producte  $producte
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function edit(Request $request)
@@ -96,7 +102,6 @@ class ProducteController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Producte  $producte
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request)
@@ -128,14 +133,25 @@ class ProducteController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Producte  $producte
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Producte $producte)
+    public function destroy(Request $request)
     {
-        //
+        $id = $request->route('id');
+        $producte = Producte::find($id);
+        if(Auth::user()->id == $producte->user_id) {
+            Storage::delete($producte>image);
+            $producte->delete();
+        }
     }
 
+    /**
+     * Search the specified resource.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function search(Request $request){
         // Get the search value from the request
         $search = $request->input('search');
@@ -148,12 +164,10 @@ class ProducteController extends Controller
             $posts = Producte::query()
             ->where('name', 'LIKE', "%{$search}%")
             ->orWhere('user_id', 'LIKE', "%{$id}%")
-            ->orderBy('views','DESC')
             ->get();
         }else {
             $posts = Producte::query()
             ->where('name', 'LIKE', "%{$search}%")
-            ->orderBy('views','DESC')
             ->get();
         }
 

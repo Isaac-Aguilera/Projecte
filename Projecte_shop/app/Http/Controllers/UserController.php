@@ -21,33 +21,6 @@ class UserController extends Controller
         //
     }
 
-    public function usersearch(Request $request,$nick){
-        // Get the search value from the request
-        $search = $request->input('search');
-
-
-        if(User::where('nick', 'LIKE', "%{$nick}%")->first()) {
-            $user = User::where('nick', '=', $nick)->first();
-
-            $id = $user->id;
-
- 
-            $posts = Video::query()
-            ->where('user_id', '=', $id)
-            ->where('title', 'LIKE', "%{$search}%")
-            ->orderBy('views','DESC')
-            ->get();
-        }else {
-            $posts = Video::query()
-            ->where('title', 'LIKE', "%{$search}%")
-            ->orderBy('views','DESC')
-            ->get();
-        }
-
-        return view('user.search')->with(['posts' => $posts, 'user' => $user]);
-    }
-
-
     /**
      * Show the form for creating a new resource.
      *
@@ -94,10 +67,9 @@ class UserController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, User $user)
+    public function update(Request $request)
     {
         $data = $request->all();
         $id = Auth::user()->id;
@@ -113,13 +85,30 @@ class UserController extends Controller
         return redirect()->route('config')->with(['message' => 'User updated!']);
     }
 
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Request $request)
+    {
+       //
+    }
+
     public function password()
     {
         
         return view('user.password');
         
     }
-
+    
+    /**
+     * Update the password.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function updatePassword(Request $request)
     {
         $data = $request->all();
@@ -137,14 +126,25 @@ class UserController extends Controller
         return redirect()->route('configPassword')->with(['message' => 'Password updated!']);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\Response
-     */
-     public function destroy(Request $request)
-     {
-        //
-     }
+    public function usersearch(Request $request,$name){
+        // Get the search value from the request
+        $search = $request->input('search');
+
+        if(User::where('name', 'LIKE', "%{$name}%")->first()) {
+            $user = User::where('name', '=', $name)->first();
+
+            $id = $user->id;
+
+            $posts = Video::query()
+            ->where('user_id', '=', $id)
+            ->where('name', 'LIKE', "%{$search}%")
+            ->get();
+        }else {
+            $posts = Video::query()
+            ->where('name', 'LIKE', "%{$search}%"
+            ->get();
+        }
+
+        return view('user.search')->with(['posts' => $posts, 'user' => $user]);
+    }
 }

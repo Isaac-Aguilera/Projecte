@@ -97,7 +97,6 @@ class VotController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Vot  $vot
      * @param  \Illuminate\Http\Request  $request
      */
     public function destroy(Request $request)

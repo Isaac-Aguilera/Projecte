@@ -4,17 +4,19 @@
 
 @section('content')
 <script src="{{ asset('js/detall.js') }}"></script>
-<div class="container" style="margin-top: 100px;">
+<div id="container" class="container" style="margin-top: 100px;">
     <div class="row">
-        <div class="col-lg-8 col-xs-12 mb-3">
-            @if (isset($error))
+        @if (isset($error))
+            <div class="col-lg-12 col-xs-12 mb-3">
                 <div class="card">
                     <div class="card-header">Error!</div>
                     <div class="card-body">  
                         <p>{{ $error }}</p>
                     </div>
-                </div>   
-            @else
+                </div> 
+            </div>  
+        @else
+            <div class="col-lg-8 col-xs-12 mb-3">  
                 <div class="card shadow">
                   <div class="poster">
                     <video class="video" poster="../{{ $video->image }}" controls>
@@ -120,77 +122,76 @@
                             @endif
                         </div>
                     </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-xs-12">
+                <div class="card shadow">
+                    <div class="card-body">
+                        <h4 class="card-title font-weight-bolder text-center">Video quality</h4>
+                        <p class="text-muted" id=video>The average rating is: <strong>{{ isset($mitjanes['video']) ? $mitjanes['video'] : '' }}</strong><span style="color: orange;" class="ml-1 fa fa-star pl-0 d-inline"></span></p>
+                        @for ($i = 1; $i < 6; $i++)
+                            <button class="fa fa-star pl-0" onmouseover="cmbst('video',{{ $i }})"
+                            onmouseout="cmbst2('video',{{ $i }})" id={{ 'video'.$i }} value={{ $i }}
+                            style="background-color: white; border:0;" onclick="valorar('video',{{ $i }},{{ $video->id }}, '{{ csrf_token() }}')"></button>
+                        @endfor
+                        @php
+                            if(Auth::user() !== null) {
+                                $valoracio = $video->valoracions->where('user_id', '=', Auth::user()->id)->where('name', '=', 'video')->first();
+                                if(isset($valoracio)) {
+                                    echo '<script type="text/javascript">
+                                        perma("video",'.$valoracio->valoracio.');
+                                    </script>';
+                                }
+                            }
+                        @endphp
+                    </div>
+                </div>
+        
+                <div class="card shadow mt-2">
+                    <div class="card-body">
+                        <h4 class="card-title font-weight-bolder text-center">Audio quality</h4>
+                        <p class="text-muted" id=audio>The average rating is: <strong>{{ isset($mitjanes['audio']) ? $mitjanes['audio'] : '' }}</strong><span style="color: orange;" class="ml-1 fa fa-star pl-0 d-inline"></span></p>
+                        @for ($i = 1; $i < 6; $i++)
+                            <button class="fa fa-star pl-0" onmouseover="cmbst('audio',{{ $i }})"
+                            onmouseout="cmbst2('audio',{{ $i }})" id={{ 'audio'.$i }} value={{ $i }}
+                            style="background-color: white; border:0;" onclick="valorar('audio',{{ $i }},{{ $video->id }}, '{{ csrf_token() }}')"></button>
+                        @endfor
+                        @php
+                            if(Auth::user() !== null) {
+                                $valoracio = $video->valoracions->where('user_id', '=', Auth::user()->id)->where('name', '=', 'audio')->first();
+                                if(isset($valoracio)) {
+                                    echo '<script type="text/javascript">
+                                        perma("audio",'.$valoracio->valoracio.');
+                                    </script>';
+                                }
+                            }
+                            
+                        @endphp 
+                    </div>
+                </div>
 
+                <div class="card shadow mt-2">
+                    <div class="card-body">
+                        <h4 class="card-title font-weight-bolder text-center">Content quality</h4>
+                        <p class="text-muted" id=content>The average rating is: <strong>{{ isset($mitjanes['content']) ? $mitjanes['content'] : '' }}</strong><span style="color: orange;" class="ml-1 fa fa-star pl-0 d-inline"></span></p>
+                        @for ($i = 1; $i < 6; $i++)
+                            <button class="fa fa-star pl-0" onmouseover="cmbst('content',{{ $i }})"
+                            onmouseout="cmbst2('content',{{ $i }})" id={{ 'content'.$i }} value={{ $i }}
+                            style="background-color: white; border:0;" onclick="valorar('content',{{ $i }},{{ $video->id }}, '{{ csrf_token() }}')"></button>
+                        @endfor
+                        @php
+                            if(Auth::user() !== null) {
+                                $valoracio = $video->valoracions->where('user_id', '=', Auth::user()->id)->where('name', '=', 'content')->first();
+                                if(isset($valoracio)) {
+                                    echo '<script type="text/javascript">
+                                        perma("content",'.$valoracio->valoracio.');
+                                    </script>';
+                                }
+                            }
+                        @endphp
+                    </div>
                 </div>
             @endif
-        </div>
-        <div class="col-lg-4 col-xs-12">
-            <div class="card shadow">
-                <div class="card-body">
-                    <h4 class="card-title font-weight-bolder text-center">Video quality</h4>
-                    <p class="text-muted" id=video>The average rating is: <strong>{{ isset($mitjanes['video']) ? $mitjanes['video'] : '' }}</strong><span style="color: orange;" class="ml-1 fa fa-star pl-0 d-inline"></span></p>
-                    @for ($i = 1; $i < 6; $i++)
-                        <button class="fa fa-star pl-0" onmouseover="cmbst('video',{{ $i }})"
-                        onmouseout="cmbst2('video',{{ $i }})" id={{ 'video'.$i }} value={{ $i }}
-                        style="background-color: white; border:0;" onclick="valorar('video',{{ $i }},{{ $video->id }}, '{{ csrf_token() }}')"></button>
-                    @endfor
-                    @php
-                        if(Auth::user() !== null) {
-                            $valoracio = $video->valoracions->where('user_id', '=', Auth::user()->id)->where('name', '=', 'video')->first();
-                            if(isset($valoracio)) {
-                                echo '<script type="text/javascript">
-                                    perma("video",'.$valoracio->valoracio.');
-                                </script>';
-                            }
-                        }
-                    @endphp
-                </div>
-            </div>
-    
-            <div class="card shadow mt-2">
-                <div class="card-body">
-                    <h4 class="card-title font-weight-bolder text-center">Audio quality</h4>
-                    <p class="text-muted" id=audio>The average rating is: <strong>{{ isset($mitjanes['audio']) ? $mitjanes['audio'] : '' }}</strong><span style="color: orange;" class="ml-1 fa fa-star pl-0 d-inline"></span></p>
-                    @for ($i = 1; $i < 6; $i++)
-                        <button class="fa fa-star pl-0" onmouseover="cmbst('audio',{{ $i }})"
-                        onmouseout="cmbst2('audio',{{ $i }})" id={{ 'audio'.$i }} value={{ $i }}
-                        style="background-color: white; border:0;" onclick="valorar('audio',{{ $i }},{{ $video->id }}, '{{ csrf_token() }}')"></button>
-                    @endfor
-                    @php
-                        if(Auth::user() !== null) {
-                            $valoracio = $video->valoracions->where('user_id', '=', Auth::user()->id)->where('name', '=', 'audio')->first();
-                            if(isset($valoracio)) {
-                                echo '<script type="text/javascript">
-                                    perma("audio",'.$valoracio->valoracio.');
-                                </script>';
-                            }
-                        }
-                        
-                    @endphp 
-                </div>
-            </div>
-
-            <div class="card shadow mt-2">
-                <div class="card-body">
-                    <h4 class="card-title font-weight-bolder text-center">Content quality</h4>
-                    <p class="text-muted" id=content>The average rating is: <strong>{{ isset($mitjanes['content']) ? $mitjanes['content'] : '' }}</strong><span style="color: orange;" class="ml-1 fa fa-star pl-0 d-inline"></span></p>
-                    @for ($i = 1; $i < 6; $i++)
-                        <button class="fa fa-star pl-0" onmouseover="cmbst('content',{{ $i }})"
-                        onmouseout="cmbst2('content',{{ $i }})" id={{ 'content'.$i }} value={{ $i }}
-                        style="background-color: white; border:0;" onclick="valorar('content',{{ $i }},{{ $video->id }}, '{{ csrf_token() }}')"></button>
-                    @endfor
-                    @php
-                        if(Auth::user() !== null) {
-                            $valoracio = $video->valoracions->where('user_id', '=', Auth::user()->id)->where('name', '=', 'content')->first();
-                            if(isset($valoracio)) {
-                                echo '<script type="text/javascript">
-                                    perma("content",'.$valoracio->valoracio.');
-                                </script>';
-                            }
-                        }
-                    @endphp
-                </div>
-            </div> 
     </div>
     
 </div>

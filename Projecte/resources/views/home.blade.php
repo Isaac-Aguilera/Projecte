@@ -9,8 +9,12 @@
 <main class="main" role="main">
     <div class="album py-5 bg-light">
         
-        <div class="container" style="margin-top: 60px;">
-            <div class="dropdown text-right">
+        <div id="container" class="container" style="margin-top: 60px;">
+            @if (session('message')) 
+                <div class="alert alert-success">{{ session()->get('message') }}</div> 
+            @endif 
+            <h3 style="margin-bottom: -20px;" id="categoria">All</h3>
+            <div style="top: -20px;"class="dropdown text-right">
                 <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Categories
                 </button>
@@ -69,3 +73,4 @@
 @endsection
 
 <script type="text/javascript" src="{{ asset('js/home.js') }}"></script>
+<script type="text/javascript" src="{{ asset('js/image.js') }}"></script>

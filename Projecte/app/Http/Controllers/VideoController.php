@@ -17,11 +17,11 @@ class VideoController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
-    {
-        
+    {  
         $video = Video::find($request->route('id'));
         if (isset($video)) {
             $video->increment('views',1);
@@ -39,6 +39,9 @@ class VideoController extends Controller
      */
     public function create()
     {
+        if (!isset(Auth::user()->id)) {
+            return redirect('login');
+        }
         return view('video.create')->with('categories', Categoria::orderBy('name')->get());
     }
 
@@ -77,39 +80,10 @@ class VideoController extends Controller
             $video->save();
         }
         
-        
         return redirect()->route('pujarVideo')->with(['message' => 'Video upload correctly']);
 
-
     }
 
-    public function search(Request $request){
-        // Get the search value from the request
-        $search = $request->input('search');
-
-        if(User::where('nick', 'LIKE', "%{$search}%")->first()) {
-            $user = User::where('nick', 'LIKE', "%{$search}%")->first();
-
-            $id = $user->id;
-            $username = User::where('nick','LIKE','%'.$search.'%');
-            $posts = Video::query()
-            ->where('title', 'LIKE', "%{$search}%")
-            ->orWhere('user_id', 'LIKE', "%{$id}%")
-            ->orderBy('views','DESC')
-            ->get();
-        }else {
-            $posts = Video::query()
-            ->where('title', 'LIKE', "%{$search}%")
-            ->orderBy('views','DESC')
-            ->get();
-        }
-
-
-        // Search in the title and body columns from the posts table
-    
-        // Return the search view with the resluts compacted
-        return view('video.search')->with('videosearch' , $posts);
-    }
 
     /**
      * Display the specified resource.
@@ -125,12 +99,14 @@ class VideoController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Video  $video
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function edit(Request $request)
     {
-        $this->middleware('auth');
+        if (!isset(Auth::user()->id)) {
+            return redirect('login');
+        }
         $video = Video::find($request->route('id'));
         if (isset($video)) {
             $video->increment('views',1);
@@ -145,7 +121,6 @@ class VideoController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Video  $video
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request)
@@ -171,7 +146,7 @@ class VideoController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Video  $video
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function destroy(Request $request)
@@ -183,5 +158,36 @@ class VideoController extends Controller
             Storage::delete($video->image);
             $video->delete();
         }
+    }
+
+    /**
+     * Find the search.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function search(Request $request){
+        // Get the search value from the request
+        $search = $request->input('search');
+
+        if(User::where('nick', 'LIKE', "%{$search}%")->first()) {
+            $user = User::where('nick', 'LIKE', "%{$search}%")->first();
+
+            $id = $user->id;
+            $username = User::where('nick','LIKE','%'.$search.'%');
+            $posts = Video::query()
+            ->where('title', 'LIKE', "%{$search}%")
+            ->orWhere('user_id', 'LIKE', "%{$id}%")
+            ->orderBy('views','DESC')
+            ->get();
+        }else {
+            $posts = Video::query()
+            ->where('title', 'LIKE', "%{$search}%")
+            ->orderBy('views','DESC')
+            ->get();
+        }
+    
+        // Return the search view with the resluts compacted
+        return view('video.search')->with('videosearch' , $posts);
     }
 }

@@ -13,6 +13,7 @@ class CategoriaController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
@@ -58,9 +59,11 @@ class CategoriaController extends Controller
             </div>';
         }
         if($a == "") {
-            return "<h4>There are no videos of the selected category!</h4>";
+            return array("content" => "<div class='col-lg-12 col-md-12 col-sm-12'>
+                <h4 class='alert alert-danger text-center'>There are no videos of ".Categoria::find($request['id'])->name." category!</h4>
+            </div>", 'name' => Categoria::find($request['id'])->name);
         } else {
-            return $a;
+            return array("content" => $a, 'name' => Categoria::find($request['id'])->name);
         }
         
     }
